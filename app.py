@@ -19,9 +19,9 @@ def webhook():
 	data = request.get_json()
 	log('Received {}'.format(data))
 
-	# prevent bot from quoting itself
-	if data['name'] != 'KitchenBot':
-		msg = '{}, you sent "{}".'.format(data['name'], data['text'])
+	# detect whether or not KitchenBot is being addressed in message
+	if "@KitchenBot" in data['text']:
+		msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
 		send_message(msg)
 
 	return "ok", 200
