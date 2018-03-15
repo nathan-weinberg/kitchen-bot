@@ -2,9 +2,13 @@ import os
 import sys
 import json
 import requests
-from flask import Flask, request
+from flask import *
 
 app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def index():
+	return "KitchenBot is online."
 
 # routes case to app when message to GroupMe is sent
 @app.route('/', methods=['POST'])
