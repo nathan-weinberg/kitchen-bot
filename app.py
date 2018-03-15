@@ -1,9 +1,8 @@
 import os
 import sys
 import json
+import requests
 
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -27,9 +26,7 @@ def send_message(msg):
 			'text'   : msg,
 			}
 
-	request = Request(url, urlencode(data).encode())
-	log('Request {}'.format(request))
-	json = urlopen(request).read().decode()
+	resp = requests.post(url, data=data)
 
 def log(msg):
 	print(str(msg))
