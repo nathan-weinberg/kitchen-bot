@@ -10,6 +10,7 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def webhook():
 	data = request.get_json()
+	log('Recieved {}'.format(data))
 
 	if data['name'] != 'KitchenBot':
 		msg = '{}, you sent "{}".'.format(data['name'], data['text'])
@@ -20,7 +21,15 @@ def webhook():
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 
-	data = {'bot_id':os.getenv('GROUPME_BOT_ID'), 'text':msg}
+	data = {
+			'bot_id' : os.getenv('GROUPME_BOT_ID'),
+			'text'   : msg,
+			}
 
 	request = Request(url, urlencode(data).encode())
+	log('Request {}'.format(request))
 	json = urlopen(request).read().decode()
+
+def log(msg):
+	print(str(msg))
+	sys.stdout.flush()
