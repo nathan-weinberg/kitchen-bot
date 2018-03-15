@@ -6,11 +6,12 @@ from flask import *
 
 app = Flask(__name__)
 
+# routes GET case to app
 @app.route('/', methods=['GET'])
 def index():
 	return "KitchenBot is online."
 
-# routes case to app when message to GroupMe is sent
+# routes POST case to app (occurs when new message to GroupMe is sent by any user)
 @app.route('/', methods=['POST'])
 def webhook():
 
