@@ -26,11 +26,14 @@ def webhook():
 
 	return "ok", 200
 
-def send_message(msg):
+def send_message(msg, user=None):
 	# GroupMe API
 	url = 'https://api.groupme.com/v3/bots/post'
-	# HTTP Post Body
-	data = {'bot_id': os.getenv('GROUPME_BOT_ID'), 'text': msg}
+	# HTTP Post Body (will mention user if arg is given)
+	if user != None:
+		data = {'bot_id': os.getenv('GROUPME_BOT_ID'), 'text': msg, 'attachments': [{'type': 'mentions', 'user_ids': [os.getenv(user)]}]}
+	else:
+		data = {'bot_id': os.getenv('GROUPME_BOT_ID'), 'text': msg}
 	# HTTP Post 
 	resp = requests.post(url, json=data)
 

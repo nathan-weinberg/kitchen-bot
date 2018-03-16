@@ -1,5 +1,5 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-from app import send_message
+from app import send_message, log
 
 sched = BlockingScheduler()
 
@@ -7,5 +7,6 @@ sched = BlockingScheduler()
 def kitchen_reminder():
     msg = "This is a test kitchen reminder! Soon I will tag whose week it is!"
     send_message(msg)
+    log('Sent {}'.format(msg))
 
 sched.start()
