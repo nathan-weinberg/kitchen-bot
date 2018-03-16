@@ -31,9 +31,22 @@ def send_message(msg, user=None):
 	url = 'https://api.groupme.com/v3/bots/post'
 	# HTTP Post Body (will mention user if arg is given)
 	if user != None:
-		data = {'bot_id': os.getenv('GROUPME_BOT_ID'), 'text': msg, 'attachments': [{'type': 'mentions', 'user_ids': [os.getenv(user)]}]}
+		data = {
+					'bot_id': os.getenv('GROUPME_BOT_ID'),
+					'text': msg,
+					'attachments': [
+						{
+						'type': 'mentions',
+						'user_ids': [os.getenv(user)],
+					 	'loci': [[0,0]]
+						}
+					]
+				}
 	else:
-		data = {'bot_id': os.getenv('GROUPME_BOT_ID'), 'text': msg}
+		data = {
+					'bot_id': os.getenv('GROUPME_BOT_ID'),
+					'text': msg
+				}
 	# HTTP Post 
 	resp = requests.post(url, json=data)
 
