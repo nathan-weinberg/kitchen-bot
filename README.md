@@ -18,3 +18,7 @@ This bot uses the following packages: Flask, Gunicorn, Requests, and APScheduler
 
 ## Notes
 KitchenBot was based off a tutorial by apnorton, which can be found here: http://www.apnorton.com/blog/2017/02/28/How-I-wrote-a-Groupme-Chatbot-in-24-hours/
+
+To edit the timezone of a Heroku server, run the following command (your timezone must be in tz database time zone format):
+
+`heroku config:add TZ=<your timezone>`
