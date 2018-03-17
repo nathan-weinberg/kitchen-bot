@@ -5,13 +5,13 @@ from app import send_message, log
 sched = BlockingScheduler()
 USER_KEYS = ['COLE','DAN','ETHAN','JAKE','JUSTIN','MAX','NATHAN']
 
-@sched.scheduled_job('cron', day_of_week='fri', hour=20, minute=40)
+@sched.scheduled_job('cron', day_of_week='fri', hour=20, minute=51)
 def kitchen_reminder():
 	user = nextBoy()
-    msg = "{}, it is your kitchen week!".format(user)
-    send_message(msg, user)
-    log('Sent {}'.format(msg))
-    return "ok", 200
+	msg = "{}, it is your kitchen week!".format(user)
+	send_message(msg, user)
+	log('Sent {}'.format(msg))
+	return "ok", 200
 
 def nextBoy():
 	for i in range(5):
