@@ -5,7 +5,7 @@ from app import send_message, log
 sched = BlockingScheduler()
 USER_KEYS = ['COLE','DAN','ETHAN','JAKE','JUSTIN','MAX','NATHAN']
 
-@sched.scheduled_job('cron', day_of_week='fri', hour=20, minute=54)
+@sched.scheduled_job('cron', day_of_week='fri', hour=21, minute=0)
 def kitchen_reminder():
 	user = nextBoy()
 	msg = "{}, it is your kitchen week!".format(user)
@@ -17,9 +17,9 @@ def nextBoy():
 	currentBoy = os.getenv('KITCHEN_BOY')
 	for i in range(5):
 		if currentBoy == USER_KEYS[i]:
-			os.putenv('KITCHEN_BOY', USER_KEYS[i+1])
+			os.environ['KITCHEN_BOY'] = USER_KEYS[i+1]
 	if currentBoy == USER_KEYS[6]:
-		os.putenv('KITCHEN_BOY', USER_KEYS[0])
+		os.environ['KITCHEN_BOY'] = USER_KEYS[0]
 	return os.getenv('KITCHEN_BOY')
 
 sched.start()
