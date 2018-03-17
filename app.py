@@ -22,7 +22,7 @@ def webhook():
 
 	# detect whether or not KitchenBot is being addressed in message
 	if "@KitchenBot" in text:
-		if "what can I ask you" in text.lower():
+		if "what can i ask you" in text.lower():
 			msg = "Just whose week it is!"
 		elif "whose week is it" in text.lower():
 			msg = "It is {}'s week!".format(os.getenv('KITCHEN_BOY'))
