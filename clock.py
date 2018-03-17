@@ -6,8 +6,17 @@ USER_KEYS = ['COLE','DAN','ETHAN','JAKE','JUSTIN','MAX','NATHAN']
 
 @sched.scheduled_job('cron', day_of_week='fri', hour=0, minute=15)
 def kitchen_reminder():
-    msg = "This is a test kitchen reminder! Soon I will tag whose week it is!"
-    send_message(msg)
+	user = nextBoy()
+    msg = "{}, it is your kitchen week!".format(user)
+    send_message(msg, user)
     log('Sent {}'.format(msg))
+    return "ok", 200
+
+def nextBoy():
+	for i in range(5):
+		if os.getenv('KITCHEN_BOY') == USER_KEYS[i]:
+			os.putenv('KITCHEN_BOY', USER_KEYS[i+1])
+	if os.getenv('KITCHEN_BOY') == USER_KEYS[6]:
+		os.putenv('KITCHEN_BOY', USER_KEYS[0])
 
 sched.start()
