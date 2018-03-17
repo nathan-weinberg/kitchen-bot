@@ -18,13 +18,13 @@ def webhook():
 	# decode JSON data
 	data = request.get_json()
 	log('Received {}'.format(data))
-	text = data['text']
+	text = data['text'].lower()
 
 	# detect whether or not KitchenBot is being addressed in message
-	if "@KitchenBot" in text:
-		if "what can i ask you" in text.lower():
+	if "@kitchenbot" in text:
+		if "what can i ask you" in text:
 			msg = "Just whose week it is!"
-		elif "whose week is it" in text.lower():
+		elif "whose week is it" in text:
 			msg = "It is {}'s week!".format(os.getenv('KITCHEN_BOY'))
 		else:
 			msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
