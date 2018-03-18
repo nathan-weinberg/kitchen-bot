@@ -24,11 +24,21 @@ def webhook():
 	if "@kitchenbot" in text:
 		if "what can i ask you" in text:
 			msg = "Just whose week it is!"
+			send_message(msg)
 		elif "whose week is it" in text:
 			msg = "It is {}'s week!".format(os.getenv('KITCHEN_BOY'))
+			send_message(msg)
+		elif "the kitchen is a mess" in text:
+			user = os.getenv("KITCHEN_BOY")
+			msg = "{}, clean the kitchen!".format(user)
+			send_message(msg, user)
+		elif "the kitchen looks great" in text:
+			user = os.getenv("KITCHEN_BOY")
+			msg = "Great job with the kitchen {}!".format(user)
+			send_message(msg, user)
 		else:
 			msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
-		send_message(msg)
+			send_message(msg)
 		log('Sent {}'.format(msg))
 	
 	return "ok", 200
