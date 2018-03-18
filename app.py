@@ -22,8 +22,8 @@ def webhook():
 
 	# detect whether or not KitchenBot is being addressed in message
 	if "@kitchenbot" in text:
-		if "what can i ask you" in text:
-			msg = "Just whose week it is!"
+		if "what can i say to you" in text:
+			msg = 'You can say to me:\n\nWhose week is it?\nThe kitchen is a mess!\nThe kitchen looks great!'
 			send_message(msg)
 		elif "whose week is it" in text:
 			msg = "It is {}'s week!".format(os.getenv('KITCHEN_BOY'))
@@ -54,7 +54,7 @@ def send_message(msg, user=None):
 						{
 						'type': 'mentions',
 						'user_ids': [os.getenv(user)],
-					 	'loci': [[0,0]]
+					 	'loci': [[0,len(msg)]]
 						}
 					]
 				}
