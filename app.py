@@ -39,7 +39,6 @@ def webhook():
 		else:
 			msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
 			send_message(msg)
-		log('Sent {}'.format(msg))
 	
 	return "ok", 200
 

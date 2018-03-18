@@ -10,7 +10,6 @@ def kitchen_reminder():
 	user = nextBoy()
 	msg = "{}, it is your kitchen week!".format(user)
 	send_message(msg, user)
-	log('Sent {}'.format(msg))
 	return "ok", 200
 
 def nextBoy():
