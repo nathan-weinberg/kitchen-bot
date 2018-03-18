@@ -7,12 +7,14 @@ USER_KEYS = ['COLE','DAN','ETHAN','JAKE','JUSTIN','MAX','NATHAN']
 
 @sched.scheduled_job('cron', day_of_week='mon', hour=23, minute=0)
 def kitchen_reminder():
-	user = nextBoy()
+	user = setNextBoy()
 	msg = "{}, it is your kitchen week!".format(user)
 	send_message(msg, user)
 	return "ok", 200
 
-def nextBoy():
+def setNextBoy():
+	""" sets and returns next Kitchen Boy
+	"""
 	currentBoy = os.getenv('KITCHEN_BOY')
 	for i in range(5):
 		if currentBoy == USER_KEYS[i]:
@@ -20,5 +22,14 @@ def nextBoy():
 	if currentBoy == USER_KEYS[6]:
 		os.environ['KITCHEN_BOY'] = USER_KEYS[0]
 	return os.getenv('KITCHEN_BOY')
+
+def getNextBoy():
+	""" returns next boy without changing environmental variables
+	"""
+	currentBoy = os.getenv('KITCHEN_BOY')
+	for i in range(5):
+		if currentBoy == USER_KEYS[i]:
+			return USER_KEYS[i+1]
+	return USER_KEYS[0]
 
 sched.start()

@@ -3,6 +3,7 @@ import sys
 import json
 import requests
 from flask import *
+from clock import getNextBoy
 
 app = Flask(__name__)
 
@@ -22,25 +23,35 @@ def webhook():
 
 	# detect whether or not KitchenBot is being addressed in message
 	if "@kitchenbot" in text:
-		if "what can i say to you" in text:
-			msg = 'You can say to me:\n\nWhose week is it?\nThe kitchen is a mess!\nThe kitchen looks great!'
-			send_message(msg)
-		elif "whose week is it" in text:
-			msg = "It is {}'s week!".format(os.getenv('KITCHEN_BOY'))
-			send_message(msg)
-		elif "the kitchen is a mess" in text:
-			user = os.getenv("KITCHEN_BOY")
-			msg = "{}, clean the kitchen!".format(user)
-			send_message(msg, user)
-		elif "the kitchen looks great" in text:
-			user = os.getenv("KITCHEN_BOY")
-			msg = "Great job with the kitchen {}!".format(user)
-			send_message(msg, user)
-		else:
-			msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
-			send_message(msg)
+		# construct and send response
+		parse_and_send(text)
 	
 	return "ok", 200
+
+def parse_and_send(text):
+	""" Checks for key phrases and responses in 
+		appropriate manner
+	"""
+	if "what can i say to you" in text:
+		msg = 'You can say to me:\n\nWhose week is it?\nThe kitchen is a mess!\nThe kitchen looks great!\nWhose week is it next?'
+		send_message(msg)
+	elif "whose week is it" in text:
+		msg = "It is {}'s week!".format(os.getenv('KITCHEN_BOY'))
+		send_message(msg)
+	elif "the kitchen is a mess" in text:
+		user = os.getenv("KITCHEN_BOY")
+		msg = "{}, clean the kitchen!".format(user)
+		send_message(msg, user)
+	elif "the kitchen looks great" in text:
+		user = os.getenv("KITCHEN_BOY")
+		msg = "Great job with the kitchen {}!".format(user)
+		send_message(msg, user)
+	elif "whose week is it next" in text:
+		msg = "It is {}'s week next week!".format(getNextBoy())
+		send_message()
+	else:
+		msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
+		send_message(msg)
 
 def send_message(msg, user=None):
 	# GroupMe API
