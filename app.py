@@ -53,9 +53,9 @@ def send_message(msg, user=None):
 					'text': msg,
 					'attachments': [
 						{
-						'type': 'mentions',
-						'user_ids': [os.getenv(user)],
-					 	'loci': [[0,len(msg)]]
+							'type': 'mentions',
+							'user_ids': [os.getenv(user)],
+					 		'loci': [[0,len(msg)]]
 						}
 					]
 				}
