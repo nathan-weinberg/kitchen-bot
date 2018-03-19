@@ -3,7 +3,6 @@ import sys
 import json
 import requests
 from flask import *
-from clock import getNextBoy
 
 app = Flask(__name__)
 
@@ -46,9 +45,6 @@ def parse_and_send(text):
 		user = os.getenv("KITCHEN_BOY")
 		msg = "Great job with the kitchen {}!".format(user)
 		send_message(msg, user)
-	elif "whose week is it next" in text:
-		msg = "It is {}'s week next week!".format(getNextBoy())
-		send_message()
 	else:
 		msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
 		send_message(msg)

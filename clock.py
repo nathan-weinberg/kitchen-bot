@@ -23,13 +23,4 @@ def setNextBoy():
 		os.environ['KITCHEN_BOY'] = USER_KEYS[0]
 	return os.getenv('KITCHEN_BOY')
 
-def getNextBoy():
-	""" returns next boy without changing environmental variables
-	"""
-	currentBoy = os.getenv('KITCHEN_BOY')
-	for i in range(5):
-		if currentBoy == USER_KEYS[i]:
-			return USER_KEYS[i+1]
-	return USER_KEYS[0]
-
 sched.start()
