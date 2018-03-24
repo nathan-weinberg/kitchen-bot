@@ -1,4 +1,5 @@
 import os
+import requests
 from apscheduler.schedulers.blocking import BlockingScheduler
 from app import send_message, log
 
@@ -7,12 +8,12 @@ USER_KEYS = ['COLE','DAN','ETHAN','JAKE','JUSTIN','MAX','NATHAN']
 
 @sched.scheduled_job('cron', day_of_week='mon', hour=1, minute=0)
 def kitchen_reminder():
-	user = setNextBoy()
+	user = nextBoy()
 	msg = "{}, it is your kitchen week!".format(user)
 	send_message(msg, user)
 	return "ok", 200
 
-def setNextBoy():
+def nextBoy():
 	""" sets and returns next Kitchen Boy
 	"""
 	currentBoy = os.getenv('KITCHEN_BOY')
