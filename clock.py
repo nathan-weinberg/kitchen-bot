@@ -42,9 +42,9 @@ def updateBoy(prevBoy,nextBoy):
 	cur = conn.cursor()
 
 	# erase responsibility from previous boy
-	cur.execute("UPDATE kitchen_boy SET isBoy = false WHERE name LIKE %s;",(prevBoy))
+	cur.execute("UPDATE kitchen_boy SET isBoy = false WHERE name LIKE (%s);",(prevBoy,))
 	# assign responsibility to next boy
-	cur.execute("UPDATE kitchen_boy SET isBoy = true WHEREname LIKE %s;",(nextBoy))
+	cur.execute("UPDATE kitchen_boy SET isBoy = true WHEREname LIKE (%s);",(nextBoy,))
 	
 	# commit changes
 	conn.commit()
@@ -61,7 +61,7 @@ def getBoy(user):
 
 def getNickname(user):
 	cur = conn.cursor()
-	cur.execute("SELECT nickname FROM nicknames WHERE name LIKE %s;",(user))
+	cur.execute("SELECT nickname FROM nicknames WHERE name LIKE (%s);",(user,))
 	nickname = cur.fetchone()[1]
 	cur.close()
 	return nickname

@@ -85,7 +85,7 @@ def getUserID(user):
 	''' gets id of user
 	'''
 	cur = conn.cursor()
-	cur.execute("SELECT id FROM user_ids WHERE name LIKE %s;",(user,))
+	cur.execute("SELECT id FROM user_ids WHERE name LIKE (%s);",(user,))
 	user_id = cur.fetchone()[1]
 	cur.close()
 	return user_id
@@ -103,7 +103,7 @@ def getNickname(user):
 	''' gets nickename of user
 	'''
 	cur = conn.cursor()
-	cur.execute("SELECT nickname FROM nicknames WHERE name LIKE %s;",(user))
+	cur.execute("SELECT nickname FROM nicknames WHERE name LIKE (%s);",(user,))
 	nickname = cur.fetchone()[1]
 	cur.close()
 	return nickname
