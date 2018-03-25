@@ -86,7 +86,7 @@ def getUserID(user):
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT id FROM user_ids WHERE name LIKE (%s);",(user,))
-	user_id = cur.fetchone()[1]
+	user_id = cur.fetchone()[0]
 	cur.close()
 	return user_id
 
