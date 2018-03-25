@@ -104,6 +104,6 @@ def getNickname(user):
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT nickname FROM nicknames WHERE name LIKE (%s);",(user,))
-	nickname = cur.fetchone()[1]
+	nickname = cur.fetchone()[0]
 	cur.close()
 	return nickname
