@@ -34,15 +34,15 @@ def webhook():
 			msg = 'You can say to me:\n\nWhose week is it?\nThe kitchen is a mess!\nThe kitchen looks great!\nWhose week is it next?'
 			send_message(msg)
 		elif "whose week is it" in text:
-			user = getBoy(user)
+			user = getBoy()
 			msg = "It is {}'s week!".format(getNickname(user))
 			send_message(msg)
 		elif "the kitchen is a mess" in text:
-			user = getBoy(user)
+			user = getBoy()
 			msg = "{}, clean the kitchen!".format(getNickname(user))
 			send_message(msg, user)
 		elif "the kitchen looks great" in text:
-			user = getBoy(user)
+			user = getBoy()
 			msg = "Great job with the kitchen {}!".format(getNickname(user))
 			send_message(msg, user)
 		else:
@@ -95,7 +95,7 @@ def getUserID(user):
 	cur.close()
 	return user_id
 
-def getBoy(user):
+def getBoy():
 	''' gets name of current kitchen boy
 	'''
 	cur = conn.cursor()
