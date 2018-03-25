@@ -18,9 +18,6 @@ def index():
 @app.route('/', methods=['POST'])
 def webhook():
 
-	# open db connection
-	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-
 	# decode JSON data
 	data = request.get_json()
 	log('Received {}'.format(data))
@@ -28,6 +25,10 @@ def webhook():
 
 	# detect whether or not KitchenBot is being addressed in message
 	if "@kitchenbot" in text:
+
+		# open db connection
+		conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+		
 		# construct and send response
 		if "what can i say to you" in text:
 			msg = 'You can say to me:\n\nWhose week is it?\nThe kitchen is a mess!\nThe kitchen looks great!\nWhose week is it next?'
@@ -48,8 +49,8 @@ def webhook():
 			msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
 			send_message(msg)
 	
-	# close db connection
-	conn.close()
+		# close db connection
+		conn.close()
 
 	return "ok", 200
 

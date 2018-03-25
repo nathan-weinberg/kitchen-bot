@@ -36,14 +36,14 @@ def nextBoy():
 	currentBoy = getBoy()
 	for i in range(5):
 		if currentBoy == USER_KEYS[i]:
-			updateBoy(prevBoy=currentBoy,newBoy=USER_KEYS[i+1])
+			nextBoy = USER_KEYS[i+1]
 	if currentBoy == USER_KEYS[6]:
-		updateBoy(prevBoy=currentBoy,newBoy=USER_KEYS[0])
-	newBoy = getBoy()
+		nextBoy = USER_KEYS[0]
+	updateBoy(currentBoy,nextBoy)
 
 	cur.close()
 	
-	return newBoy
+	return nextBoy
 
 def updateBoy(prevBoy,nextBoy):
 	''' passes responsiblity of kitchen boy
