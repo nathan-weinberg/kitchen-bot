@@ -6,6 +6,7 @@ import psycopg2
 from flask import *
 
 DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 app = Flask(__name__)
 
@@ -25,9 +26,6 @@ def webhook():
 
 	# detect whether or not KitchenBot is being addressed in message
 	if "@kitchenbot" in text:
-
-		# open db connection
-		conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 		
 		# construct and send response
 		if "what can i say to you" in text:
@@ -48,9 +46,6 @@ def webhook():
 		else:
 			msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
 			send_message(msg)
-	
-		# close db connection
-		conn.close()
 
 	return "ok", 200
 
