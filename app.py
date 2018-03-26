@@ -74,21 +74,11 @@ def send_message(msg, user=None):
 	resp = requests.post(url, json=data)
 	log('Sent {}'.format(msg))
 
-
 def log(msg):
 	print(str(msg))
 	sys.stdout.flush()
 
-## Db interaction functions
-
-def getUserID(user):
-	''' gets id of user
-	'''
-	cur = conn.cursor()
-	cur.execute("SELECT id FROM user_ids WHERE name LIKE (%s);",(user,))
-	user_id = cur.fetchone()[0]
-	cur.close()
-	return user_id
+### database interaction functions ###
 
 def getBoy():
 	''' gets name of current kitchen boy
@@ -100,10 +90,19 @@ def getBoy():
 	return boy
 
 def getNickname(user):
-	''' gets nickename of user
+	''' gets nickname of user
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT nickname FROM nicknames WHERE name LIKE (%s);",(user,))
 	nickname = cur.fetchone()[0]
 	cur.close()
 	return nickname
+
+def getUserID(user):
+	''' gets id of user
+	'''
+	cur = conn.cursor()
+	cur.execute("SELECT id FROM user_ids WHERE name LIKE (%s);",(user,))
+	user_id = cur.fetchone()[0]
+	cur.close()
+	return user_id
