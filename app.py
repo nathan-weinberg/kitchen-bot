@@ -46,7 +46,7 @@ def webhook():
 		elif "whose week is next" in text:
 			user = getNextBoy()
 			msg = "It is {}'s week next week!".format(getNickname(user))
-			send_message(msg, user)
+			send_message(msg)
 		else:
 			msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
 			send_message(msg)
