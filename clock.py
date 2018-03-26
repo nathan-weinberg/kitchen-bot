@@ -10,7 +10,7 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 sched = BlockingScheduler()
 USER_KEYS = ['COLE','DAN','ETHAN','JAKE','JUSTIN','MAX','NATHAN']
 
-@sched.scheduled_job('cron', day_of_week='mon', hour=1, minute=0)
+@sched.scheduled_job('cron', day_of_week='mon', hour=0, minute=6)
 def kitchen_reminder():
 	user = nextBoy()
 	nickname = getNickname(user)
@@ -37,7 +37,7 @@ def nextBoy():
 	cur.close()
 	return nextBoy
 
-def getBoy(user):
+def getBoy():
 	''' gets name of current kitchen boy
 	'''
 	cur = conn.cursor()
