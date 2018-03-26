@@ -43,7 +43,7 @@ def webhook():
 			user = getBoy()
 			msg = "Great job with the kitchen {}!".format(getNickname(user))
 			send_message(msg, user)
-		elif "whose week is it next" in text:
+		elif "whose week is next" in text:
 			user = getNextBoy()
 			msg = "It is {}'s week next week!".format(getNickname(user))
 			send_message(msg, user)
@@ -107,8 +107,8 @@ def getNextBoy():
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT * FROM kitchen_boy;")
-	boys =  cur.fetchall()
-	for i in range(len(boys)):
+	boys = cur.fetchall()
+	for i in range(len(boys) - 1):
 		if boys[i][1] == True:
 			return boys[i+1][0]
 	return boys[0][0]
