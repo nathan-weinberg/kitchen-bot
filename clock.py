@@ -10,7 +10,7 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 sched = BlockingScheduler()
 USER_KEYS = ['COLE','DAN','ETHAN','JAKE','JUSTIN','MAX','NATHAN']
 
-@sched.scheduled_job('cron', day_of_week='mon', hour=0, minute=6)
+@sched.scheduled_job('cron', day_of_week='mon', hour=0, minute=9)
 def kitchen_reminder():
 	user = nextBoy()
 	nickname = getNickname(user)
@@ -63,7 +63,7 @@ def updateBoy(prevBoy,nextBoy):
 def getNickname(user):
 	cur = conn.cursor()
 	cur.execute("SELECT nickname FROM nicknames WHERE name LIKE (%s);",(user,))
-	nickname = cur.fetchone()[1]
+	nickname = cur.fetchone()[0]
 	cur.close()
 	return nickname
 
