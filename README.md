@@ -8,13 +8,20 @@ KitchenBot is a GroupMe bot currently under development that is designed to send
 ## Setup
 GroupMe Bots require an account with GroupMe. They can be created either by API or via form; both methods are described on their Developers site which can be found here: https://dev.groupme.com/
 
-Once done, you will need to incorporate the "bot_id" of your bot into your hosting environment as "GROUPME_BOT_ID".
+Once done, you will need to incorporate the "bot_id" of your bot into your hosting environment as "GROUPME_BOT_ID". You will also need to incorporate the database URL you are using in the environment as "DATABASE_URL."
 
 ## Usage
-KitchenBot must be hosted on a platform of some sort; personally I use the Heroku cloud platform.
+KitchenBot is currently configured to be hosted on the Heroku cloud platform using the Heroku Postgres database. All further reading will assume the usage of Heroku and Postgres; however theoretically you can use any hosting/database service.
 
 ### Packages
-This bot uses the following packages: Flask, Gunicorn, Requests, and APScheduler. All can be either `pip` installed or found online. Ensure the installed versions match those specified in `requirements.txt`.
+This bot uses the following packages: Flask, Gunicorn, Requests, APScheduler, and psycopg2. All can be either `pip` installed or found online. Ensure the installed versions match those specified in `requirements.txt`.
+
+### Database Configuration
+KitchenBot uses psycopg2 to interact via PostgreSQL with its database. More information on how to use these tools can be found here:
+
+https://devcenter.heroku.com/articles/heroku-postgresql
+
+http://initd.org/psycopg/docs/index.html
 
 ## Notes
 KitchenBot was based off a tutorial by apnorton, which can be found here: http://www.apnorton.com/blog/2017/02/28/How-I-wrote-a-Groupme-Chatbot-in-24-hours/
