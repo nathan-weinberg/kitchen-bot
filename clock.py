@@ -9,11 +9,10 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('cron', day_of_week='mon', hour=0, minute=9)
+@sched.scheduled_job('cron', day_of_week='mon', hour=0, minute=0)
 def kitchen_reminder():
 	user = nextBoy()
-	nickname = getNickname(user)
-	msg = "{}, it is your kitchen week!".format(nickname)
+	msg = "{}, it is your kitchen week!".format(getNickname(user))
 	send_message(msg, user)
 	return "ok", 200
 
