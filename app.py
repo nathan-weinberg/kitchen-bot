@@ -93,6 +93,15 @@ def getBoy():
 	cur.close()
 	return boy
 
+def getNextBoy():
+	''' gets next week's kitchen boy
+	'''
+	cur = conn.cursor()
+	cur.execute("SELECT nextboy FROM kitchen_boy WHERE isBoy;")
+	nextBoy = cur.fetchone()[0]
+	cur.close()
+	return nextBoy
+
 def getNickname(user):
 	''' gets nickname of user
 	'''
@@ -101,17 +110,6 @@ def getNickname(user):
 	nickname = cur.fetchone()[0]
 	cur.close()
 	return nickname
-
-def getNextBoy():
-	''' gets next week's kitchen boy
-	'''
-	cur = conn.cursor()
-	cur.execute("SELECT * FROM kitchen_boy;")
-	boys = cur.fetchall()
-	for i in range(len(boys) - 1):
-		if boys[i][1] == True:
-			return boys[i+1][0]
-	return boys[0][0]
 
 def getUserID(user):
 	''' gets id of user
