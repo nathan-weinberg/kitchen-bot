@@ -16,7 +16,7 @@ def kitchen_reminder():
 	msg = "{}, it is your kitchen week!".format(getNickname(nextBoy))
 
 	updateBoy(currentBoy, nextBoy)
-	send_message(msg, [user])
+	send_message(msg, [nextBoy])
 	return "ok", 200
 
 ### database interaction functions ###
