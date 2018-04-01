@@ -97,7 +97,9 @@ def getAll():
 	cur = conn.cursor()
 	cur.execute("SELECT name FROM kitchen_boy;")
 	raw_boys = cur.fetchall() # fetchall names, put in list
+	log("raw_boys: {}".format(raw_boys))
 	boys = [boy[0] for boy in raw_boys]
+	log("boys: {}".format(boys))
 	cur.close()
 	return boys
 
