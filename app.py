@@ -83,7 +83,7 @@ def send_message(msg, users=[]):
 				}
 	# HTTP Post 
 	resp = requests.post(url, json=data)
-	log('Sent {}'.format(msg))
+	log('Sent {}'.format(data))
 
 def log(msg):
 	print(str(msg))
@@ -97,9 +97,7 @@ def getAll():
 	cur = conn.cursor()
 	cur.execute("SELECT name FROM kitchen_boy;")
 	raw_boys = cur.fetchall() # fetchall names, put in list
-	log("raw_boys: {}".format(raw_boys))
 	boys = [boy[0] for boy in raw_boys]
-	log("boys: {}".format(boys))
 	cur.close()
 	return boys
 
