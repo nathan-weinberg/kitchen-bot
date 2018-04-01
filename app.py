@@ -38,11 +38,11 @@ def webhook():
 		elif "the kitchen is a mess" in text:
 			user = getBoy()
 			msg = "{}, clean the kitchen!".format(getNickname(user))
-			send_message(msg, user)
+			send_message(msg, [user])
 		elif "the kitchen looks great" in text:
 			user = getBoy()
 			msg = "Great job with the kitchen {}!".format(getNickname(user))
-			send_message(msg, user)
+			send_message(msg, [user])
 		elif "whose week is next" in text:
 			user = getNextBoy()
 			msg = "It is {}'s week next week!".format(getNickname(user))
@@ -50,24 +50,28 @@ def webhook():
 		elif ("downstairs" or "basement") and ("fridge" or "refrigerator") in text:
 			msg = "That is outside my jurisdiction." 
 			send_message(msg)
+		elif "send help" in text:
+			users = getAll()
+			msg = "Help!"
+			send_message(msg, users)
 		else:
 			msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
 			send_message(msg)
 
 	return "ok", 200
 
-def send_message(msg, user=None):
+def send_message(msg, users=[]):
 	# GroupMe API
 	url = 'https://api.groupme.com/v3/bots/post'
 	# HTTP Post Body (will mention user if arg is given)
-	if user != None:
+	if users != []:
 		data = {
 					'bot_id': os.getenv('GROUPME_BOT_ID'),
 					'text': msg,
 					'attachments': [
 						{
 							'type': 'mentions',
-							'user_ids': [getUserID(user)],
+							'user_ids': [getUserID(user) for user in users],
 					 		'loci': [[0,len(msg)]]
 						}
 					]
@@ -87,6 +91,16 @@ def log(msg):
 
 ### database interaction functions ###
 
+def getAll():
+	''' gets names of all boys
+	'''
+	cur = conn.cursor()
+	cur.execute("SELECT name FROM kitchen_boy;")
+	raw_boys = cur.fetchall() # fetchall names, put in list
+	boys = [boy[0] for boy in raw_boys]
+	cur.close()
+	return boys
+
 def getBoy():
 	''' gets name of current kitchen boy
 	'''
@@ -97,7 +111,7 @@ def getBoy():
 	return boy
 
 def getNextBoy():
-	''' gets next week's kitchen boy
+	''' gets name of next week's kitchen boy
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT nextboy FROM kitchen_boy WHERE isBoy;")
