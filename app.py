@@ -13,7 +13,7 @@ app = Flask(__name__)
 # routes GET case to app
 @app.route('/', methods=['GET'])
 def index():
-	return "KitchenBot is online."
+	return render_template("index.html")
 
 # routes POST case to app (occurs when new message to GroupMe is sent by any user)
 @app.route('/', methods=['POST'])
