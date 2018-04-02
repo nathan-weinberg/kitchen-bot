@@ -72,7 +72,7 @@ def send_message(msg, users=[]):
 						{
 							'type': 'mentions',
 							'user_ids': [str(getUserID(user)) for user in users],
-					 		'loci': [[0,len(msg)]]
+					 		'loci': [[0,len(msg)] for user in users]
 						}
 					]
 				}
