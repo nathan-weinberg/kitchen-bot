@@ -66,7 +66,7 @@ def send_message(msg, users=[]):
 	# HTTP Post Body (will mention user if arg is given)
 	if users != []:
 		data = {
-					'bot_id': os.getenv('GROUPME_BOT_ID'),
+					'bot_id': os.environ['GROUPME_BOT_ID'],
 					'text': msg,
 					'attachments': [
 						{
@@ -78,7 +78,7 @@ def send_message(msg, users=[]):
 				}
 	else:
 		data = {
-					'bot_id': os.getenv('GROUPME_BOT_ID'),
+					'bot_id': os.environ['GROUPME_BOT_ID'],
 					'text': msg
 				}
 	# HTTP Post 
@@ -96,7 +96,7 @@ def getAll():
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT name FROM kitchen_boy;")
-	raw_boys = cur.fetchall() # fetchall names, put in list
+	raw_boys = cur.fetchall()
 	boys = [boy[0] for boy in raw_boys]
 	cur.close()
 	return boys
