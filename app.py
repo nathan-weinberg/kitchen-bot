@@ -71,7 +71,7 @@ def send_message(msg, users=[]):
 					'attachments': [
 						{
 							'type': 'mentions',
-							'user_ids': [getUserID(user) for user in users],
+							'user_ids': [str(getUserID(user)) for user in users],
 					 		'loci': [[0,len(msg)]]
 						}
 					]
@@ -82,7 +82,7 @@ def send_message(msg, users=[]):
 					'text': msg
 				}
 	# HTTP Post 
-	resp = requests.post(url, json=data)
+	resp = requests.post(url, json=data)	
 	log('Sent {}'.format(data))
 
 def log(msg):
