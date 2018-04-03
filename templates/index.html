@@ -2,9 +2,12 @@
 <html lang="en">
 
 	<head>
+
 		<title>KitchenBot</title>
 		<link rel="stylesheet" href="../static/style.css">
+		<script src="../static/scripts.js"></script>
 		<meta charset="UTF-8">
+		
 	</head>
 
 	<body>
@@ -12,9 +15,21 @@
 		<h1>KitchenBot</h1>
 		<img src="../static/kitchen_boy.png" style="width: 176px; height: 290px;">
 		<hr/>
-		<h2 id="status">Status</h2>
+
+		<h2 id="statusHeader">Status</h2>
 		<p>KitchenBot is Online.</p>
 		<hr/>
+
+		<h2 id='formHeader'>Send Message via KitchenBot</h2>
+		<form action="/" method="post">
+			Web ID:<br/>
+			<input type="text" name = "webid"><br/>
+			Message:<br/>
+			<textarea name="message" rows="10" cols="30"></textarea><br/><br/>
+			<input type="submit" name="submit">
+		</form>
+		<hr/>
+
 		<a href="https://github.com/nathan-weinberg/kitchen-bot" target="_blank">Check out the project on GitHub</a>
 
 	</body>

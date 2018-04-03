@@ -11,8 +11,16 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 app = Flask(__name__)
 
 # routes GET case to app
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET','POST'])
 def index():
+	if request.method == 'POST':
+		web_id = request.form['webid']
+		msg = request.form['message']
+		if hash(webid) == os.environ['WEB_ID']:
+			send_message(text)
+		else:
+			log("Unauthorized access! attempt!")
+
 	return render_template("index.html")
 
 # routes POST case to app (occurs when new message to GroupMe is sent by any user)
@@ -84,6 +92,9 @@ def send_message(msg, users=[]):
 	# HTTP Post 
 	resp = requests.post(url, json=data)	
 	log('Sent {}'.format(data))
+
+def hash(text):
+	return hashlib.sha256(text.encode()).hexdigest()
 
 def log(msg):
 	print(str(msg))
