@@ -65,7 +65,7 @@ def custom_message():
 
 	web_id = request.form['webid']
 	msg = request.form['message']
-	if hash(webid) == os.environ['WEB_ID']:
+	if hash(web_id) == os.environ['WEB_ID']:
 		send_message(text)
 	else:
 		log("Unauthorized access attempt!")
