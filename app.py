@@ -13,14 +13,6 @@ app = Flask(__name__)
 # routes GET case to app
 @app.route('/', methods=['GET','POST'])
 def index():
-	if request.method == 'POST':
-		web_id = request.form['webid']
-		msg = request.form['message']
-		if hash(webid) == os.environ['WEB_ID']:
-			send_message(text)
-		else:
-			log("Unauthorized access! attempt!")
-
 	return render_template("index.html")
 
 # routes POST case to app (occurs when new message to GroupMe is sent by any user)
@@ -67,6 +59,18 @@ def webhook():
 			send_message(msg)
 
 	return "ok", 200
+
+@app.route('/custom', methods=['POST'])
+def custom_message():
+
+	web_id = request.form['webid']
+	msg = request.form['message']
+	if hash(webid) == os.environ['WEB_ID']:
+		send_message(text)
+	else:
+		log("Unauthorized access attempt!")
+
+	return redirect('/')
 
 def send_message(msg, users=[]):
 	# GroupMe API
