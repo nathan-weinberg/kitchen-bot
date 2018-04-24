@@ -3,7 +3,7 @@
 ##### Written in Python 3.6
 
 ## Purpose
-KitchenBot is a GroupMe bot currently under development that is designed to send messages to members of a Group at a certain period - in this case a reminder to clean the kitchen. It can also currently respond to HTTP GET and POST requests, the latter in a limited capacity whenever the bot is mentioned in the Group it is present within.
+KitchenBot is a GroupMe bot that is designed to send messages to members of a Group at a certain period - in this case a reminder to clean the kitchen. It can also currently respond to HTTP GET and POST requests, the latter in a limited capacity whenever the bot is mentioned in the Group it is present within.
 
 ## Setup
 GroupMe Bots require an account with GroupMe. They can be created either by API or via form; both methods are described on their Developers site which can be found here: https://dev.groupme.com/
