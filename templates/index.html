@@ -12,27 +12,39 @@
 
 	<body>
 
-		<h1>KitchenBot</h1>
-		<img src="../static/kitchen_boy.png" style="width: 176px; height: 290px;">
+		<!-- Title -->
+		<div id="title">
+			<h1 id="titleHeader">KitchenBot</h1> 
+			<img src="../static/kitchen_boy.png" style="width: 176px; height: 290px;">
+		</div>
+
+		 <!-- Status -->
+		<div id="status">
+			<h2 id="statusHeader">Status</h2>
+			<p>KitchenBot is Online.</p>
+		</div>
+
+		 <!-- Custom Message Form -->
+		<div id="form">
+			<h2 id='formHeader'>Send Message via KitchenBot</h2>
+			<form action="/custom" method="post">
+				<div>
+					<label for="webid">Web ID:</label>
+					<input type="text" id="webid" name="web_id">
+				</div>
+				<div>
+					<label for="msg">Message:</label>
+					<textarea id="msg" name="message"></textarea>
+				</div>
+				<div class="button">
+					<button type="submit">Send</button>
+				</div>
+			</form>
+		</div>
 
 		<hr/>
 
-		<h2 id="statusHeader">Status</h2>
-		<p>KitchenBot is Online.</p>
-
-		<hr/>
-
-		<h2 id='formHeader'>Send Message via KitchenBot</h2>
-		<form action="/custom" method="post">
-			Web ID:<br/>
-			<input type="text" name="webid"><br/>
-			Message:<br/>
-			<textarea name="message" rows="10" cols="30"></textarea><br/><br/>
-			<input type="submit" name="submit">
-		</form>
-
-		<hr/>
-
+		<!-- GitHub Link -->
 		<a href="https://github.com/nathan-weinberg/kitchen-bot" target="_blank">Check out the project on GitHub</a>
 
 	</body>
