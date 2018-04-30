@@ -32,6 +32,9 @@ def webhook():
 		if "what can i say to you" in text:
 			msg = 'You can say to me:\n\nWhose week is it?\nThe kitchen is a mess!\nThe kitchen looks great!\nWhose week is it next?'
 			send_message(msg)
+		elif "whose week is next" in text:
+			user = getNextBoy()
+			msg = "It is {}'s week next week!".format(getNickname(user))
 		elif "whose week is it" in text:
 			user = getBoy()
 			msg = "It is {}'s week!".format(getNickname(user))
@@ -44,9 +47,6 @@ def webhook():
 			user = getBoy()
 			msg = "Great job with the kitchen {}!".format(getNickname(user))
 			send_message(msg, [user])
-		elif "whose week is next" in text:
-			user = getNextBoy()
-			msg = "It is {}'s week next week!".format(getNickname(user))
 			send_message(msg)
 		elif ("downstairs" or "basement") and ("fridge" or "refrigerator") in text:
 			msg = "That is outside my jurisdiction." 
