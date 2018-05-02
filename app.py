@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-import hashlib
+import passlib
 import requests
 import psycopg2
 from flask import *
@@ -30,31 +30,38 @@ def webhook():
 		
 		# construct and send response
 		if "what can i say to you" in text:
-			msg = 'You can say to me:\n\nWhose week is it?\nThe kitchen is a mess!\nThe kitchen looks great!\nWhose week is it next?'
+			msg = 'You can say to me:\n\nWhose week is it?\nThe kitchen is a mess!\nThe kitchen looks great!\nWhose week is it next?\nSend help!'
 			send_message(msg)
+
 		elif "whose week is next" in text:
 			user = getNextBoy()
 			msg = "It is {}'s week next week!".format(getNickname(user))
+			send_message(msg)
+
 		elif "whose week is it" in text:
 			user = getBoy()
 			msg = "It is {}'s week!".format(getNickname(user))
 			send_message(msg)
+
 		elif "the kitchen is a mess" in text:
 			user = getBoy()
 			msg = "{}, clean the kitchen!".format(getNickname(user))
 			send_message(msg, [user])
+
 		elif "the kitchen looks great" in text:
 			user = getBoy()
 			msg = "Great job with the kitchen {}!".format(getNickname(user))
 			send_message(msg, [user])
-			send_message(msg)
+
 		elif ("downstairs" or "basement") and ("fridge" or "refrigerator") in text:
 			msg = "That is outside my jurisdiction." 
 			send_message(msg)
+
 		elif "send help" in text:
 			users = getAll()
 			msg = "Help!"
 			send_message(msg, users)
+
 		else:
 			msg = "Hey {}, I see you addressed me but I'm too dumb to know what you're saying right now!".format(data['name'])
 			send_message(msg)
@@ -65,7 +72,8 @@ def webhook():
 def custom_message():
 	web_id = request.form['web_id']
 	msg = request.form['message']
-	if hash(web_id) == os.environ['WEB_ID']:
+	web_id_hash = os.environ['WEB_ID']
+	if pbkdf2_sha256.verify(web_id, web_id_hash):
 		send_message(msg)
 	else:
 		log("Unauthorized access attempt!")
@@ -96,9 +104,6 @@ def send_message(msg, users=[]):
 	# HTTP Post 
 	resp = requests.post(url, json=data)	
 	log('Sent {}'.format(data))
-
-def hash(text):
-	return hashlib.sha256(text.encode()).hexdigest()
 
 def log(msg):
 	print(str(msg))

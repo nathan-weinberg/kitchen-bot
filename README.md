@@ -14,7 +14,7 @@ Once done, you will need to incorporate the "bot_id" of your bot into your hosti
 KitchenBot is currently configured to be hosted on the Heroku cloud platform using the Heroku Postgres database. All further reading will assume the usage of Heroku and Postgres; however theoretically you can use any hosting/database service.
 
 ### Packages
-This bot uses the following packages: Flask, Gunicorn, Requests, APScheduler, and psycopg2. All can be either `pip` installed or found online. Ensure the installed versions match those specified in `requirements.txt`.
+This bot uses the following packages: Flask, Gunicorn, Requests, APScheduler, and passlib, psycopg2. All can be either `pip` installed or found online. Ensure the installed versions match those specified in `requirements.txt`.
 
 ### Database Configuration
 KitchenBot uses psycopg2 to interact via PostgreSQL with its database. More information on how to use these tools can be found here:
