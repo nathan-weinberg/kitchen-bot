@@ -1,10 +1,10 @@
 import os
 import sys
 import json
-import passlib
 import requests
 import psycopg2
 from flask import *
+from passlib.hash import pbkdf2_sha256
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
