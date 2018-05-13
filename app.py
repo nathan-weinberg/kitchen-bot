@@ -132,7 +132,7 @@ def log(msg):
 ### database interaction functions ###
 
 def getAll():
-	''' gets names of all boys
+	''' returns List of names of all boys
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT name FROM kitchen_boy;")
@@ -142,7 +142,7 @@ def getAll():
 	return boys
 
 def getBoy():
-	''' gets name of current kitchen boy
+	''' returns String of name of current kitchen boy
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT name FROM kitchen_boy WHERE isBoy;")
@@ -151,7 +151,7 @@ def getBoy():
 	return boy
 
 def getNextBoy():
-	''' gets name of next week's kitchen boy
+	''' reuturns String of name of next week's kitchen boy
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT nextboy FROM kitchen_boy WHERE isBoy;")
@@ -160,7 +160,7 @@ def getNextBoy():
 	return nextBoy
 
 def getNickname(user):
-	''' gets nickname of user
+	''' returns String of nickname of nickname of user
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT nickname FROM nicknames WHERE name LIKE (%s);",(user,))
@@ -169,7 +169,7 @@ def getNickname(user):
 	return nickname
 
 def getUserID(user):
-	''' gets id of user
+	''' gets String of GroupMe ID of user
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT id FROM user_ids WHERE name LIKE (%s);",(user,))
