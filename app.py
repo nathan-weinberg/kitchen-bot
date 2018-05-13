@@ -88,10 +88,12 @@ def custom_message():
 	web_id_hash = os.environ['WEB_ID']
 	if pbkdf2_sha256.verify(web_id, web_id_hash):
 		
-		if user != "NONE":
-			send_message(msg, [user])
-		else:
+		if user == "NONE":
 			send_message(msg)
+		elif user == "ALL":
+			send_message(msg, getAll())
+		else:
+			send_message(msg, [user])
 
 	else:
 		log("Unauthorized access attempt!")
