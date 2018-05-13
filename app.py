@@ -20,8 +20,8 @@ def index():
 		boys = getAll()
 
 		boysDict = {}
-		for i in range(len(boys)):
-			boysDict[i] = boys[i]
+		for boy in boys:
+			boysDict[boy] = getNickname(boy)
 
 		boysJSON = jsonify(boysDict)
 		return boysJSON
