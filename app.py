@@ -16,7 +16,7 @@ app = Flask(__name__)
 def index():
 
 	# returns JSON of all boys in db to front-end
-	if requests.method == 'POST':
+	if request.method == 'POST':
 		boys = getAll()
 
 		boysDict = {}
