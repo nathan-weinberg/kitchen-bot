@@ -12,8 +12,20 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 app = Flask(__name__)
 
 # routes GET case to app
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET','POST'])
 def index():
+
+	# returns JSON of all boys in db to front-end
+	if requests.method == 'POST':
+		boys = getAll()
+
+		boysDict = {}
+		for i in range(len(boys)):
+			boysDict[i] = boys[i]
+
+		boysJSON = jsonify(boysDict)
+		return boysJSON
+
 	return render_template("index.html")
 
 # routes POST case to app (occurs when new message to GroupMe is sent by any user)
@@ -72,9 +84,15 @@ def webhook():
 def custom_message():
 	web_id = request.form['web_id']
 	msg = request.form['message']
+	user = request.form['mention']
 	web_id_hash = os.environ['WEB_ID']
 	if pbkdf2_sha256.verify(web_id, web_id_hash):
-		send_message(msg)
+		
+		if user != "NONE":
+			send_message(msg, [user])
+		else:
+			send_message(msg)
+
 	else:
 		log("Unauthorized access attempt!")
 

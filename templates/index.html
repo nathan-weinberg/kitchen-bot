@@ -6,11 +6,12 @@
 		<title>KitchenBot</title>
 		<link rel="stylesheet" href="../static/style.css">
 		<script src="../static/scripts.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<meta charset="UTF-8">
 		
 	</head>
 
-	<body>
+	<body onload="populateSelect()">
 
 		<!-- Title -->
 		<div id="title">
@@ -36,6 +37,24 @@
 					<label for="msg">Message:</label>
 					<textarea id="msg" name="message"></textarea>
 				</div>
+
+				<!-- Do dynamically from DB Table --> 
+				<div>
+					<label for="dynamic-select">Mention:</label>
+					<select id="dynamic-select" name="mention"></select>
+				</div>
+				<!----------------------------------> 
+
+				<!--
+				<option value="NONE">None</option>
+				<option value="COLE">Cole</option>
+				<option value="DAN">Daniel</option>
+				<option value="ETHAN">Ethan</option>
+				<option value="JAKE">Jake</option>
+				<option value="MAX">Max</option>
+				<option value="NATHAN">Nathan</option>
+				-->
+
 				<div class="button">
 					<button type="submit">Send</button>
 				</div>
