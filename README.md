@@ -6,7 +6,7 @@
 KitchenBot is a GroupMe bot that is designed to send messages to members of a Group at a certain period - in this case a reminder to clean the kitchen. It can also currently respond to HTTP GET and POST requests, the latter in a limited capacity whenever the bot is mentioned in the Group it is present within.
 
 ## Setup
-GroupMe Bots require an account with GroupMe. They can be created either by API or via form; both methods are described on their Developers site which can be found here: https://dev.groupme.com/
+GroupMe Bots require an account with GroupMe. They can be created either by API or via form; both methods are described on their Developers site which can be found [here](https://dev.groupme.com/).
 
 Once done, you will need to incorporate the "bot_id" of your bot into your hosting environment as "GROUPME_BOT_ID". You will also need to incorporate the database URL you are using in the environment as "DATABASE_URL."
 
