@@ -88,12 +88,15 @@ def sentiment_analysis(text):
 	'''
 
 	# create tone analyzer
-	tone_analyzer = ToneAnalyzerV3(
-    	version = "2017-09-21",
-    	username = os.environ["IBM_USERNAME"],
-    	password = os.environ["IBM_PASSWORD"]
-	)
-	tone_analyzer.set_default_headers({'x-watson-learning-opt-out': "true"})
+	try:
+		tone_analyzer = ToneAnalyzerV3(
+	    	version = "2017-09-21",
+	    	username = os.environ["IBM_USERNAME"],
+	    	password = os.environ["IBM_PASSWORD"]
+		)
+		tone_analyzer.set_default_headers({'x-watson-learning-opt-out': "true"})
+	except:
+		return "I'm not sure what to think! (No IBM Cloud account found)"
 
 	# API call
 	try:
@@ -121,6 +124,7 @@ def sentiment_analysis(text):
 		elif emotional_tones[0] == "sadness":
 			return "I'm sorry you're sad."
 		else:
+			log(emotional_tones)
 			return "I'm not sure what to think! (error 2)"
 
 @app.route('/custom', methods=['POST'])
