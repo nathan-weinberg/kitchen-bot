@@ -115,6 +115,8 @@ def sentiment_analysis(text):
 		# responses
 		if len(emotional_tones) > 1:
 			return "I'm sensing a lot of emotion from this message."
+		elif len(emotional_tones) < 1:
+			return "I'm not sure what to think!"
 		elif emotional_tones[0] == "anger":
 			return "Chill out, man."
 		elif emotional_tones[0] == "fear":
