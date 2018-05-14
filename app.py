@@ -13,21 +13,21 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 app = Flask(__name__)
 
 # routes GET case to app
-@app.route('/', methods=['GET','POST'])
+@app.route('/', methods=['GET'])
 def index():
-
-	# returns JSON of all boys in db to front-end
-	if request.method == 'POST':
-		boys = getAll()
-
-		boysDict = {}
-		for boy in boys:
-			boysDict[boy] = getNickname(boy)
-
-		boysJSON = jsonify(boysDict)
-		return boysJSON
-
 	return render_template("index.html")
+
+# returns JSON of all boys in db to front-end
+@app.route('/select', methods=['POST'])
+def select():
+	boys = getAll()
+
+	boysDict = {}
+	for boy in boys:
+		boysDict[boy] = getNickname(boy)
+
+	boysJSON = jsonify(boysDict)
+	return boysJSON
 
 # routes POST case to app (occurs when new message to GroupMe is sent by any user)
 @app.route('/', methods=['POST'])
