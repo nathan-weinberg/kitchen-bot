@@ -2,21 +2,27 @@ import os
 import requests
 import psycopg2
 from apscheduler.schedulers.blocking import BlockingScheduler
-from app import send_message, log, getBoy, getNextBoy, getNickname
+from app import send_message, log, getBoy, getNextBoy, getNickname, getAll
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('cron', day_of_week='mon', hour=0, minute=30)
-def kitchen_reminder():
-	currentBoy = getBoy()
-	nextBoy = getNextBoy()
-	msg = "{}, it is your kitchen week!".format(getNickname(nextBoy))
+# @sched.scheduled_job('cron', day_of_week='mon', hour=0, minute=30)
+# def kitchen_reminder():
+# 	currentBoy = getBoy()
+# 	nextBoy = getNextBoy()
+# 	msg = "{}, it is your kitchen week!".format(getNickname(nextBoy))
 
-	updateBoy(currentBoy, nextBoy)
-	send_message(msg, [nextBoy])
+# 	updateBoy(currentBoy, nextBoy)
+# 	send_message(msg, [nextBoy])
+# 	return "ok", 200
+
+@sched.scheduled_job('cron', day=1)
+def rent_reminder():
+	msg = "Don't forget to pay rent!"
+	send_message(msg, getAll())
 	return "ok", 200
 
 ### database interaction functions ###

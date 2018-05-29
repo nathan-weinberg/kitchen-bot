@@ -38,8 +38,9 @@ def webhook():
 	log('Received {}'.format(data))
 	text = data['text'].lower()
 
-	# detect whether or not KitchenBot is being addressed in message
-	if "@kitchenbot" in text:
+	# detect whether or not SummerBot is being addressed in message
+	## hotfix
+	if "@summerbot" in text:
 		
 		# construct and send response
 		if "what can i say to you" in text:

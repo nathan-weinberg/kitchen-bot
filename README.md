@@ -35,6 +35,13 @@ This bot uses the following packages: Flask, Gunicorn, Requests, APScheduler, pa
 ### Database Configuration
 KitchenBot uses psycopg2 to interact via PostgreSQL with its database. More information on how to use these tools can be found [here](https://devcenter.heroku.com/articles/heroku-postgresql) and [here](http://initd.org/psycopg/docs/index.html).
 
+## Migration
+To move your bot from one GroupMe group to another, perform the following steps:
+
+- Create a new GroupMe bot associated with your new group. The callback URL should be the same.
+- Change your "GROUPME_BOT_ID" environmental variable to match the bot ID of your newly created-bot.
+- Make appropriate changes to source code/database system
+
 ## Notes
 KitchenBot was based off a tutorial by apnorton, which can be found [here](http://www.apnorton.com/blog/2017/02/28/How-I-wrote-a-Groupme-Chatbot-in-24-hours/).
 
