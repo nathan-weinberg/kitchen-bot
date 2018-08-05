@@ -38,7 +38,7 @@ def webhook():
 	log('Received {}'.format(data))
 	text = data['text'].lower()
 
-	# detect whether or not SummerBot is being addressed in message
+	# detect whether or not KitchenBot is being addressed in message
 	if "@kitchenbot" in text:
 		
 		# construct and send response
