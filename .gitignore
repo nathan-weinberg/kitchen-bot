@@ -1,7 +1,9 @@
+database/
 info.txt
 Procfile.windows
 app_test.py
 plan.txt
+sql_2.0.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

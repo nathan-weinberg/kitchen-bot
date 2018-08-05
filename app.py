@@ -103,7 +103,7 @@ def sentiment_analysis(text):
 		toneJSON = tone_analyzer.tone(text, 'text/plain')
 	except WatsonApiException as ex:
 		log("Watson API call failed with status code " + str(ex.code) + ": " + ex.message)
-		return "I'm not sure what to think! (error 1)"
+		return "I'm not sure what to think! (error 1: check logs)"
 	else:
 		detected_tones = toneJSON["document_tone"]["tones"]
 		emotional_tones = []
@@ -127,7 +127,7 @@ def sentiment_analysis(text):
 			return "I'm sorry you're sad."
 		else:
 			log(emotional_tones)
-			return "I'm not sure what to think! (error 2)"
+			return "I'm not sure what to think! (error 2: check logs)"
 
 @app.route('/custom', methods=['POST'])
 def custom_message():
