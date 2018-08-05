@@ -9,15 +9,15 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 sched = BlockingScheduler()
 
-# @sched.scheduled_job('cron', day_of_week='mon', hour=0, minute=30)
-# def kitchen_reminder():
-# 	currentBoy = getBoy()
-# 	nextBoy = getNextBoy()
-# 	msg = "{}, it is your kitchen week!".format(getNickname(nextBoy))
+@sched.scheduled_job('cron', day_of_week='mon', hour=0, minute=30)
+def kitchen_reminder():
+	currentBoy = getBoy()
+	nextBoy = getNextBoy()
+	msg = "{}, it is your kitchen week!".format(getNickname(nextBoy))
 
-# 	updateBoy(currentBoy, nextBoy)
-# 	send_message(msg, [nextBoy])
-# 	return "ok", 200
+	updateBoy(currentBoy, nextBoy)
+	send_message(msg, [nextBoy])
+	return "ok", 200
 
 @sched.scheduled_job('cron', day=1)
 def rent_reminder():
