@@ -12,12 +12,12 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 app = Flask(__name__)
 
-# routes GET case to app
+# routes GET case to app (occurs when webpage is accessed)
 @app.route('/', methods=['GET'])
 def index():
 	return render_template("index.html")
 
-# returns JSON of all boys in db to front-end
+# returns JSON of all boys in db to front-end (occurs automatically when webpage is loaded)
 @app.route('/select', methods=['POST'])
 def select():
 	boys = getAll()
@@ -43,17 +43,22 @@ def webhook():
 		
 		# construct and send response
 		if "what can i say to you" in text:
-			msg = 'You can say to me:\n\nWhose week is it?\nThe kitchen is a mess!\nThe kitchen looks great!\nWhose week is it next?\nSend help!'
+			msg = 'You can say to me:\n\n\
+					Whose day is it?\n\
+					The kitchen is a mess!\n\
+					The kitchen looks great!\n\
+					Whose day is next?\n\
+					Send help!'
 			send_message(msg)
 
-		elif "whose week is next" in text:
+		elif "whose day is next" in text:
 			user = getNextBoy()
-			msg = "It is {}'s week next week!".format(getNickname(user))
+			msg = "It is {}'s day tomorrow!".format(getNickname(user))
 			send_message(msg)
 
-		elif "whose week is it" in text:
+		elif "whose day is it" in text:
 			user = getBoy()
-			msg = "It is {}'s week!".format(getNickname(user))
+			msg = "It is {}'s day!".format(getNickname(user))
 			send_message(msg)
 
 		elif "the kitchen is a mess" in text:
@@ -200,7 +205,7 @@ def getBoy():
 	return boy
 
 def getNextBoy():
-	''' reuturns String of name of next week's kitchen boy
+	''' reuturns String of name of next boy
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT nextboy FROM kitchen_boy WHERE isBoy;")
