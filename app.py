@@ -97,7 +97,8 @@ def sentiment_analysis(text):
 		tone_analyzer = ToneAnalyzerV3(
 	    	version = "2017-09-21",
 	    	username = os.environ["IBM_USERNAME"],
-	    	password = os.environ["IBM_PASSWORD"]
+	    	password = os.environ["IBM_PASSWORD"],
+	    	url="https://gateway.watsonplatform.net/tone-analyzer/api"
 		)
 		tone_analyzer.set_default_headers({'x-watson-learning-opt-out': "true"})
 	except:
@@ -105,7 +106,7 @@ def sentiment_analysis(text):
 
 	# API call
 	try:
-		toneJSON = tone_analyzer.tone(text, 'text/plain')
+		toneJSON = tone_analyzer.tone(text, 'text/plain').get_response()
 	except WatsonApiException as ex:
 		log("Watson API call failed with status code " + str(ex.code) + ": " + ex.message)
 		return "I'm not sure what to think! (error 1: check logs)"
