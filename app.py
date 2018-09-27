@@ -106,7 +106,7 @@ def sentiment_analysis(text):
 
 	# API call
 	try:
-		toneJSON = tone_analyzer.tone(text, 'text/plain').get_response()
+		toneJSON = tone_analyzer.tone(text, 'text/plain').get_result()
 	except WatsonApiException as ex:
 		log("Watson API call failed with status code " + str(ex.code) + ": " + ex.message)
 		return "I'm not sure what to think! (error 1: check logs)"
