@@ -206,7 +206,7 @@ def getBoy():
 	return boy
 
 def getNextBoy():
-	''' reuturns String of name of next boy
+	''' returns String of name of next boy
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT nextboy FROM kitchen_boy WHERE isBoy;")
