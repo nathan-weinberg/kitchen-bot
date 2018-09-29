@@ -53,7 +53,7 @@ def webhook():
 
 		elif "whose day is next" in text:
 			user = getNextBoy()
-			msg = "It is {}'s day tomorrow!".format(getNickname(user))
+			msg = "It will be {}'s day next!".format(getNickname(user))
 			send_message(msg)
 
 		elif "whose day is it" in text:

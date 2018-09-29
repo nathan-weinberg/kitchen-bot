@@ -7,9 +7,6 @@ from app import send_message, log, getBoy, getNextBoy, getNickname, getAll
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-sched = BlockingScheduler()
-
-@sched.scheduled_job('cron', day='*/2',hour=0, minute=30)
 def kitchen_reminder():
 	currentBoy = getBoy()
 	nextBoy = getNextBoy()
@@ -19,13 +16,10 @@ def kitchen_reminder():
 	send_message(msg, [nextBoy])
 	return "ok", 200
 
-@sched.scheduled_job('cron', day=1)
 def rent_reminder():
 	msg = "Don't forget to pay rent!"
 	send_message(msg, getAll())
 	return "ok", 200
-
-### database interaction functions ###
 
 def updateBoy(prevBoy,nextBoy):
 	''' passes responsiblity of kitchen boy
@@ -41,4 +35,7 @@ def updateBoy(prevBoy,nextBoy):
 	conn.commit()
 	cur.close()
 
+sched = BlockingScheduler()
+sched.add_job(kitchen_reminder, 'cron', day='*/2', hour=0, minute=30)
+sched.add_job(rent_reminder, 'cron', day=1)
 sched.start()
