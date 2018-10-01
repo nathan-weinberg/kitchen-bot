@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import datetime
 import requests
 import psycopg2
 from flask import *
@@ -42,7 +43,7 @@ def webhook():
 	if "@kitchenbot" in text:
 		
 		# construct and send response
-		if "what can i say to you" in text:
+		if "what can i say to you" or "what can i ask you" in text:
 			msg = 'You can say to me:\n\n'\
 					'Whose day is it?\n'\
 					'The kitchen is a mess!\n'\
@@ -53,12 +54,40 @@ def webhook():
 
 		elif "whose day is next" in text:
 			user = getNextBoy()
-			msg = "It will be {}'s day next!".format(getNickname(user))
+
+			if getBoyNum() == 1:
+				dayAfterTomorow = datetime.date.today() + datetime.timedelta(days=2)
+				msg = "It will be {}'s day on !".format(
+					getNickname(user),
+					dayAfterTomorow.strftime("%A")
+				)
+			elif getBoyNum() == 2:
+				msg = "It will be {}'s day tomorow!".format(getNickname(user))
+			else:
+				msg = "Error: getBoyNum() returned an unexpected int"
+
 			send_message(msg)
 
 		elif "whose day is it" in text:
 			user = getBoy()
-			msg = "It is {}'s day!".format(getNickname(user))
+
+			if getBoyNum() == 1:
+				today = datetime.date.today()
+				tomorow = datetime.date.today() + datetime.timedelta(days=1)
+				msg = "It is {}'s day today, {}, and tomorow, {}!".format(
+					getNickname(user),
+					today.strftime("%A"),
+					tomorow.strftime("%A")
+				)
+			elif getBoyNum() == 2:
+				today = datetime.date.today()
+				msg = "It is {}'s day today, {}!".format(
+					getNickname(user),
+					today.strftime("%A")
+				)
+			else:
+				msg = "Error: getBoyNum() returned an unexpected int"
+
 			send_message(msg)
 
 		elif "the kitchen is a mess" in text:
@@ -204,6 +233,16 @@ def getBoy():
 	boy = cur.fetchone()[0]
 	cur.close()
 	return boy
+
+def getBoyNum():
+	''' returns Int of day number for current kitchen boy
+	'''
+	cur = conn.cursor()
+	cur.execute("SELECT dayNum FROM kitchen_boy WHERE isBoy;")
+	num = cur.fetchone()[0]
+	cur.close()
+	return num
+
 
 def getNextBoy():
 	''' returns String of name of next boy

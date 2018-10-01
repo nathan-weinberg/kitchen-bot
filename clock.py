@@ -21,21 +21,38 @@ def rent_reminder():
 	send_message(msg, getAll())
 	return "ok", 200
 
+def change_day(num):
+	''' changes dayNum attribute for current boy
+	'''
+
+	cur = conn.cursor()
+	currentBoy = getBoy()
+
+	# changes dayNum variable of currentBoy in kitchen_boy table to num
+	cur.execute("UPDATE kitchen_boy SET dayNum = {} WHERE name LIKE {};").format(num, currentBoy)
+
+	# commit changes
+	conn.commit()
+	cur.close()
+
 def updateBoy(prevBoy,nextBoy):
 	''' passes responsiblity of kitchen boy
 	'''	
 	cur = conn.cursor()
 
 	# erase responsibility from previous boy
-	cur.execute("UPDATE kitchen_boy SET isBoy = false WHERE name LIKE (%s);",(prevBoy,))
+	cur.execute("UPDATE kitchen_boy SET isBoy = false WHERE name LIKE {}};".format(prevBoy))
+	# reset day number of previous boy
+	cur.execute("UPDATE kitchen_boy SET dayNum = 1 WHERE name LIKE {};".format(prevBoy))
 	# assign responsibility to next boy
-	cur.execute("UPDATE kitchen_boy SET isBoy = true WHERE name LIKE (%s);",(nextBoy,))
+	cur.execute("UPDATE kitchen_boy SET isBoy = true WHERE name LIKE {};".format(nextBoy))
 	
 	# commit changes
 	conn.commit()
 	cur.close()
 
 sched = BlockingScheduler()
-sched.add_job(kitchen_reminder, 'cron', day='*/2', hour=0, minute=30)
+sched.add_job(kitchen_reminder, 'cron', day='*/2', hour=0, minute=15)
+sched.add_job(change_day, 'cron', [2], hour=0, minute=30)
 sched.add_job(rent_reminder, 'cron', day=1)
 sched.start()
