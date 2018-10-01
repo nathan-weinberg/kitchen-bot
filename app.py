@@ -44,12 +44,12 @@ def webhook():
 		
 		# construct and send response
 		if "what can i say to you" or "what can i ask you" in text:
-			msg = 'You can say to me:\n\n'\
-					'Whose day is it?\n'\
-					'Whose day is next?\n'\
-					'The kitchen is a mess!\n'\
-					'The kitchen looks great!\n'\
-					'Send help!'
+			msg = "You can say to me:\n\n" \
+					"Whose day is it?\n" \
+					"Whose day is next?\n" \
+					"The kitchen is a mess!\n" \
+					"The kitchen looks great!\n" \
+					"Send help!"
 			send_message(msg)
 
 		elif "whose day is next" or "who is next" in text:
