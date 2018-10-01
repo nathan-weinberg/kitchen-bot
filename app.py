@@ -46,18 +46,18 @@ def webhook():
 		if "what can i say to you" or "what can i ask you" in text:
 			msg = 'You can say to me:\n\n'\
 					'Whose day is it?\n'\
+					'Whose day is next?\n'\
 					'The kitchen is a mess!\n'\
 					'The kitchen looks great!\n'\
-					'Whose day is next?\n'\
 					'Send help!'
 			send_message(msg)
 
-		elif "whose day is next" in text:
+		elif "whose day is next" or "who is next" in text:
 			user = getNextBoy()
 
 			if getBoyNum() == 1:
 				dayAfterTomorow = datetime.date.today() + datetime.timedelta(days=2)
-				msg = "It will be {}'s day on !".format(
+				msg = "It will be {}'s day on {}!".format(
 					getNickname(user),
 					dayAfterTomorow.strftime("%A")
 				)

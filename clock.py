@@ -8,13 +8,20 @@ DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 def kitchen_reminder():
-	currentBoy = getBoy()
-	nextBoy = getNextBoy()
-	msg = "{}, it is your kitchen day!".format(getNickname(nextBoy))
+	currentBoyNum = getBoyNum()
 
-	updateBoy(currentBoy, nextBoy)
-	send_message(msg, [nextBoy])
-	return "ok", 200
+	# fire if today is rollover day
+	if currentBoyNum == 2:
+		
+		# pass responsiblity
+		currentBoy = getBoy()
+		nextBoy = getNextBoy()
+		updateBoy(currentBoy, nextBoy)
+		
+		# send message to new kitchen boy
+		msg = "{}, it is your kitchen day!".format(getNickname(nextBoy))
+		send_message(msg, [nextBoy])
+		return "ok", 200
 
 def rent_reminder():
 	msg = "Don't forget to pay rent!"
@@ -29,7 +36,7 @@ def change_day(num):
 	currentBoy = getBoy()
 
 	# changes dayNum variable of currentBoy in kitchen_boy table to num
-	cur.execute("UPDATE kitchen_boy SET dayNum = {} WHERE name LIKE {};").format(num, currentBoy)
+	cur.execute("UPDATE kitchen_boy SET dayNum = {} WHERE name LIKE {};".format(num, currentBoy))
 
 	# commit changes
 	conn.commit()
@@ -52,7 +59,7 @@ def updateBoy(prevBoy,nextBoy):
 	cur.close()
 
 sched = BlockingScheduler()
-sched.add_job(kitchen_reminder, 'cron', day='*/2', hour=0, minute=15)
-sched.add_job(change_day, 'cron', [2], hour=0, minute=30)
+sched.add_job(kitchen_reminder, 'cron', hour=0, minute=15)
+sched.add_job(change_day, 'cron', [2], day='*/2', hour=0, minute=30)
 sched.add_job(rent_reminder, 'cron', day=1)
 sched.start()
