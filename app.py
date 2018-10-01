@@ -43,7 +43,7 @@ def webhook():
 	if "@kitchenbot" in text:
 		
 		# construct and send response
-		if "what can i say to you" or "what can i ask you" in text:
+		if ("what can i say to you" in text) or ("what can i ask you" in text):
 			msg = "You can say to me:\n\n" \
 					"Whose day is it?\n" \
 					"Whose day is next?\n" \
@@ -52,7 +52,7 @@ def webhook():
 					"Send help!"
 			send_message(msg)
 
-		elif "whose day is next" or "who is next" in text:
+		elif ("whose day is next" in text) or ("who is next" in text):
 			user = getNextBoy()
 
 			if getBoyNum() == 1:
