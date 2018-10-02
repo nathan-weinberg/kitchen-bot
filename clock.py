@@ -2,7 +2,7 @@ import os
 import requests
 import psycopg2
 from apscheduler.schedulers.blocking import BlockingScheduler
-from app import send_message, log, getBoy, getNextBoy, getNickname, getAll
+from app import send_message, log, getBoy, getNextBoy, getNickname, getAll, getBoyNum
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
