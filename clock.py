@@ -8,41 +8,54 @@ DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 def kitchen_reminder():
+
 	currentBoyNum = getBoyNum()
 
-	# fire if today is rollover day
-	if currentBoyNum == 2:
+	# fire if first day has passed
+	if currentBoyNum == 1:
+
+		# increment day
+		currentBoy = getBoy()
+		changeDay(currentBoy, 2)
+		log("Changed Day")
+
+	# fire if second day has passed
+	elif currentBoyNum == 2:
 		
 		# pass responsiblity
 		currentBoy = getBoy()
 		nextBoy = getNextBoy()
 		updateBoy(currentBoy, nextBoy)
+		log("Passed responsiblity")
 		
 		# send message to new kitchen boy
 		msg = "{}, it is your kitchen day!".format(getNickname(nextBoy))
 		send_message(msg, [nextBoy])
-		return "ok", 200
+
+	else:
+		log("Error: getBoyNum() returned an unexpected value: {}".format(currentBoyNum))
+	
+	return "ok", 200
 
 def rent_reminder():
 	msg = "Don't forget to pay rent!"
 	send_message(msg, getAll())
 	return "ok", 200
 
-def change_day(num):
-	''' changes dayNum attribute for current boy
+def changeDay(boy, num):
+	''' changes dayNum attribute for given boy
 	'''
 
 	cur = conn.cursor()
-	currentBoy = getBoy()
 
 	# changes dayNum variable of currentBoy in kitchen_boy table to num
-	cur.execute("UPDATE kitchen_boy SET dayNum = {} WHERE name LIKE {};".format(num, currentBoy))
+	cur.execute("UPDATE kitchen_boy SET dayNum = {} WHERE name LIKE {};".format(num, boy))
 
 	# commit changes
 	conn.commit()
 	cur.close()
 
-def updateBoy(prevBoy,nextBoy):
+def updateBoy(prevBoy, nextBoy):
 	''' passes responsiblity of kitchen boy
 	'''	
 	cur = conn.cursor()
@@ -60,6 +73,5 @@ def updateBoy(prevBoy,nextBoy):
 
 sched = BlockingScheduler()
 sched.add_job(kitchen_reminder, 'cron', hour=0, minute=15)
-sched.add_job(change_day, 'cron', [2], day='*/2', hour=0, minute=30)
 sched.add_job(rent_reminder, 'cron', day=1)
 sched.start()
