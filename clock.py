@@ -10,13 +10,14 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 def kitchen_reminder():
 
 	currentBoyNum = getBoyNum()
+	log("Function triggered: getBoyNum got value: {}".format(currentBoyNum))
 
 	# fire if first day has passed
 	if currentBoyNum == 1:
 
 		# increment day
 		currentBoy = getBoy()
-		changeDay(currentBoy, 2)
+		changeDay(currentBoy)
 		log("Changed Day")
 
 	# fire if second day has passed
@@ -42,14 +43,14 @@ def rent_reminder():
 	send_message(msg, getAll())
 	return "ok", 200
 
-def changeDay(boy, num):
-	''' changes dayNum attribute for given boy
+def changeDay(boy):
+	''' changes dayNum attribute to 2 for given boy
 	'''
 
 	cur = conn.cursor()
 
 	# changes dayNum variable of currentBoy in kitchen_boy table to num
-	cur.execute("UPDATE kitchen_boy SET dayNum = {} WHERE name LIKE {};".format(num, boy))
+	cur.execute("UPDATE kitchen_boy SET dayNum = 2 WHERE name LIKE (%s);",(boy,))
 
 	# commit changes
 	conn.commit()
@@ -61,11 +62,11 @@ def updateBoy(prevBoy, nextBoy):
 	cur = conn.cursor()
 
 	# erase responsibility from previous boy
-	cur.execute("UPDATE kitchen_boy SET isBoy = false WHERE name LIKE {}};".format(prevBoy))
+	cur.execute("UPDATE kitchen_boy SET isBoy = false WHERE name LIKE (%s);",(prevBoy,))
 	# reset day number of previous boy
-	cur.execute("UPDATE kitchen_boy SET dayNum = 1 WHERE name LIKE {};".format(prevBoy))
+	cur.execute("UPDATE kitchen_boy SET dayNum = 1 WHERE name LIKE (%s);",(prevBoy,))
 	# assign responsibility to next boy
-	cur.execute("UPDATE kitchen_boy SET isBoy = true WHERE name LIKE {};".format(nextBoy))
+	cur.execute("UPDATE kitchen_boy SET isBoy = true WHERE name LIKE (%s);",(nextBoy,))
 	
 	# commit changes
 	conn.commit()
