@@ -10,24 +10,21 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 def kitchen_reminder():
 
 	currentBoyNum = getBoyNum()
-	log("Function triggered: getBoyNum got value: {}".format(currentBoyNum))
 
-	# fire if first day has passed
+	# if first day has passed
 	if currentBoyNum == 1:
 
 		# increment day
 		currentBoy = getBoy()
 		changeDay(currentBoy)
-		log("Changed Day")
 
-	# fire if second day has passed
+	# if second day has passed
 	elif currentBoyNum == 2:
 		
 		# pass responsiblity
 		currentBoy = getBoy()
 		nextBoy = getNextBoy()
 		updateBoy(currentBoy, nextBoy)
-		log("Passed responsiblity")
 		
 		# send message to new kitchen boy
 		msg = "{}, it is your kitchen day!".format(getNickname(nextBoy))
@@ -46,7 +43,6 @@ def rent_reminder():
 def changeDay(boy):
 	''' changes dayNum attribute to 2 for given boy
 	'''
-
 	cur = conn.cursor()
 
 	# changes dayNum variable of currentBoy in kitchen_boy table to num
@@ -73,6 +69,6 @@ def updateBoy(prevBoy, nextBoy):
 	cur.close()
 
 sched = BlockingScheduler()
-sched.add_job(kitchen_reminder, 'cron', hour=0, minute=15)
+sched.add_job(kitchen_reminder, 'cron', hour=0, minute=0)
 sched.add_job(rent_reminder, 'cron', day=1)
 sched.start()

@@ -48,3 +48,6 @@ KitchenBot was based off a tutorial by apnorton, which can be found [here](http:
 To edit the timezone of a Heroku server, run the following command (your timezone must be in tz database time zone format):
 
 `heroku config:add TZ=<your timezone>`
+
+### Clock Sleeping Issue
+The free tier of Heroku puts your app to sleep after a certain amount of time. This can lead to issues with the clock functions firing. This can be mitigated by using a third-party service to keep your app awake such as [Kaffeine](https://kaffeine.herokuapp.com/).
