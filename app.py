@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import time
 import datetime
 import requests
 import psycopg2
@@ -67,7 +68,8 @@ def webhook():
 			elif dayNum == 2:
 				msg = "It will be {}'s day tomorow!".format(db.getNickname(conn, user))
 			else:
-				msg = "Error: getBoyNum() returned an unexpected int: {}".format(dayNum)
+				msg = "I'm not quite sure."
+				log("Error: getBoyNum() returned an unexpected int: {}".format(dayNum))
 
 			send_message(msg)
 
@@ -90,7 +92,8 @@ def webhook():
 					today.strftime("%A")
 				)
 			else:
-				msg = "Error: getBoyNum() returned an unexpected int: {}".format(dayNum)
+				msg = "I'm not quite sure."
+				log("Error: getBoyNum() returned an unexpected int: {}".format(dayNum))
 
 			send_message(msg)
 
@@ -209,6 +212,8 @@ def send_message(msg, users=[]):
 					'bot_id': os.environ['GROUPME_BOT_ID'],
 					'text': msg
 				}
+	# sleep 1 second before sending message
+	time.sleep(1)
 	# HTTP Post 
 	resp = requests.post(url, json=data)	
 	log('Sent {}'.format(data))

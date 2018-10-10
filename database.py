@@ -1,3 +1,5 @@
+# psycopg2 connection (conn) must be passed to all funcs for functionality
+
 def getAll(conn):
 	''' returns List of names of all boys
 	'''
