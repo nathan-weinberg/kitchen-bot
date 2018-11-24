@@ -1,9 +1,12 @@
 import os
 import sys
 import json
+import time
 import datetime
 import requests
 import psycopg2
+import database as db
+
 from flask import *
 from passlib.hash import pbkdf2_sha256
 from watson_developer_cloud import ToneAnalyzerV3, WatsonApiException
@@ -21,11 +24,11 @@ def index():
 # returns JSON of all boys in db to front-end (occurs automatically when webpage is loaded)
 @app.route('/select', methods=['POST'])
 def select():
-	boys = getAll()
+	boys = db.getAll(conn)
 
 	boysDict = {}
 	for boy in boys:
-		boysDict[boy] = getNickname(boy)
+		boysDict[boy] = db.getNickname(conn, boy)
 
 	boysJSON = jsonify(boysDict)
 	return boysJSON
@@ -53,51 +56,55 @@ def webhook():
 			send_message(msg)
 
 		elif ("whose day is next" in text) or ("who is next" in text):
-			user = getNextBoy()
+			user = db.getNextBoy(conn)
+			dayNum = db.getBoyNum(conn)
 
-			if getBoyNum() == 1:
+			if dayNum == 1:
 				dayAfterTomorow = datetime.date.today() + datetime.timedelta(days=2)
 				msg = "It will be {}'s day on {}!".format(
-					getNickname(user),
+					db.getNickname(conn, user),
 					dayAfterTomorow.strftime("%A")
 				)
-			elif getBoyNum() == 2:
-				msg = "It will be {}'s day tomorow!".format(getNickname(user))
+			elif dayNum == 2:
+				msg = "It will be {}'s day tomorow!".format(db.getNickname(conn, user))
 			else:
-				msg = "Error: getBoyNum() returned an unexpected int"
+				msg = "I'm not quite sure."
+				log("Error: getBoyNum() returned an unexpected int: {}".format(dayNum))
 
 			send_message(msg)
 
 		elif "whose day is it" in text:
-			user = getBoy()
+			user = db.getBoy(conn)
+			dayNum = db.getBoyNum(conn)
 
-			if getBoyNum() == 1:
+			if dayNum == 1:
 				today = datetime.date.today()
 				tomorow = datetime.date.today() + datetime.timedelta(days=1)
 				msg = "It is {}'s day today, {}, and tomorow, {}!".format(
-					getNickname(user),
+					db.getNickname(conn, user),
 					today.strftime("%A"),
 					tomorow.strftime("%A")
 				)
-			elif getBoyNum() == 2:
+			elif dayNum == 2:
 				today = datetime.date.today()
 				msg = "It is {}'s day today, {}!".format(
-					getNickname(user),
+					db.getNickname(conn, user),
 					today.strftime("%A")
 				)
 			else:
-				msg = "Error: getBoyNum() returned an unexpected int"
+				msg = "I'm not quite sure."
+				log("Error: getBoyNum() returned an unexpected int: {}".format(dayNum))
 
 			send_message(msg)
 
 		elif "the kitchen is a mess" in text:
-			user = getBoy()
-			msg = "{}, clean the kitchen!".format(getNickname(user))
+			user = db.getBoy(conn)
+			msg = "{}, clean the kitchen!".format(db.getNickname(conn, user))
 			send_message(msg, [user])
 
 		elif "the kitchen looks great" in text:
-			user = getBoy()
-			msg = "Great job with the kitchen {}!".format(getNickname(user))
+			user = db.getBoy(conn)
+			msg = "Great job with the kitchen {}!".format(db.getNickname(conn, user))
 			send_message(msg, [user])
 
 		elif ("downstairs" or "basement") and ("fridge" or "refrigerator") in text:
@@ -105,7 +112,7 @@ def webhook():
 			send_message(msg)
 
 		elif "send help" in text:
-			users = getAll()
+			users = db.getAll(conn)
 			msg = "Help!"
 			send_message(msg, users)
 
@@ -175,7 +182,7 @@ def custom_message():
 		if user == "NONE":
 			send_message(msg)
 		elif user == "ALL":
-			send_message(msg, getAll())
+			send_message(msg, db.getAll(conn))
 		else:
 			send_message(msg, [user])
 
@@ -195,7 +202,7 @@ def send_message(msg, users=[]):
 					'attachments': [
 						{
 							'type': 'mentions',
-							'user_ids': [str(getUserID(user)) for user in users],
+							'user_ids': [str(db.getUserID(conn, user)) for user in users],
 					 		'loci': [[0,len(msg)] for user in users]
 						}
 					]
@@ -205,6 +212,8 @@ def send_message(msg, users=[]):
 					'bot_id': os.environ['GROUPME_BOT_ID'],
 					'text': msg
 				}
+	# sleep 1 second before sending message
+	time.sleep(1)
 	# HTTP Post 
 	resp = requests.post(url, json=data)	
 	log('Sent {}'.format(data))
@@ -212,61 +221,3 @@ def send_message(msg, users=[]):
 def log(msg):
 	print(str(msg))
 	sys.stdout.flush()
-
-### database interaction functions ###
-
-def getAll():
-	''' returns List of names of all boys
-	'''
-	cur = conn.cursor()
-	cur.execute("SELECT name FROM kitchen_boy;")
-	raw_boys = cur.fetchall()
-	boys = [boy[0] for boy in raw_boys]
-	cur.close()
-	return boys
-
-def getBoy():
-	''' returns String of name of current kitchen boy
-	'''
-	cur = conn.cursor()
-	cur.execute("SELECT name FROM kitchen_boy WHERE isBoy;")
-	boy = cur.fetchone()[0]
-	cur.close()
-	return boy
-
-def getBoyNum():
-	''' returns Int of day number for current kitchen boy
-	'''
-	cur = conn.cursor()
-	cur.execute("SELECT dayNum FROM kitchen_boy WHERE isBoy;")
-	num = cur.fetchone()[0]
-	cur.close()
-	return num
-
-
-def getNextBoy():
-	''' returns String of name of next boy
-	'''
-	cur = conn.cursor()
-	cur.execute("SELECT nextboy FROM kitchen_boy WHERE isBoy;")
-	nextBoy = cur.fetchone()[0]
-	cur.close()
-	return nextBoy
-
-def getNickname(user):
-	''' returns String of nickname of nickname of user
-	'''
-	cur = conn.cursor()
-	cur.execute("SELECT nickname FROM nicknames WHERE name LIKE (%s);",(user,))
-	nickname = cur.fetchone()[0]
-	cur.close()
-	return nickname
-
-def getUserID(user):
-	''' gets String of GroupMe ID of user
-	'''
-	cur = conn.cursor()
-	cur.execute("SELECT id FROM user_ids WHERE name LIKE (%s);",(user,))
-	user_id = cur.fetchone()[0]
-	cur.close()
-	return user_id
