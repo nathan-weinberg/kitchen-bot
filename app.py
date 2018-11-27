@@ -33,6 +33,18 @@ def select():
 	boysJSON = jsonify(boysDict)
 	return boysJSON
 
+# returns JSON of schedule in db to front-end (occurs automatically when webpage is loaded)
+@app.route('/schedule', methods=['POST'])
+def schedule():
+	data = db.getSchedule(conn)
+
+	# replace tuples with raw names to tuples with nicknames
+	for i in range(len(data)):
+		data[i] = (db.getNickname(conn, data[i][0]), data[i][1], db.getNickname(conn, data[i][2]), data[i][3])
+
+	dataJSON = jsonify(data)
+	return dataJSON
+
 # routes POST case to app (occurs when new message to GroupMe is sent by any user)
 @app.route('/', methods=['POST'])
 def webhook():

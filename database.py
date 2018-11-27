@@ -28,6 +28,12 @@ def getBoyNum(conn):
 	cur.close()
 	return num
 
+def getSchedule(conn):
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM kitchen_boy ORDER BY name;")
+	schedule = cur.fetchall()
+	cur.close()
+	return schedule
 
 def getNextBoy(conn):
 	''' returns String of name of next boy
