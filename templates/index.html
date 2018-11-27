@@ -12,7 +12,7 @@
 		
 	</head>
 
-	<body onload="populateSelect()">
+	<body onload="populateSelect(); viewSchedule();">
 
 		<!-- Title -->
 		<div id="title">
@@ -24,6 +24,12 @@
 		<div id="status">
 			<h2 id="statusHeader">Status</h2>
 			<p>KitchenBot is Online.</p>
+		</div>
+
+		<!-- Schedule -->
+		<div id="schedule">
+			<h2 id="scheduleHeader">Schedule</h2>
+			<div id="table"></div>
 		</div>
 
 		 <!-- Custom Message Form -->
