@@ -9,7 +9,6 @@ function populateSelect() {
 			select.options[select.options.length] = new Option (boysJSON[index], index)
 		}
 	});
-
 }
 
 function viewSchedule() {
@@ -24,23 +23,23 @@ function viewSchedule() {
 		legend.setAttribute("id", "rowLegend");
 		document.getElementById("scheduleTable").appendChild(legend)
 
-		var name = document.createElement("TD");
-		var t1 = document.createTextNode("name");
+		var name = document.createElement("TH");
+		var t1 = document.createTextNode("Name");
 		name.appendChild(t1);
 		document.getElementById("rowLegend").appendChild(name);
 
-		var isboy = document.createElement("TD");
-		var t2 = document.createTextNode("isboy");
+		var isboy = document.createElement("TH");
+		var t2 = document.createTextNode("Current Boy");
 		isboy.appendChild(t2);
 		document.getElementById("rowLegend").appendChild(isboy);
 
-		var nextboy = document.createElement("TD");
-		var t3 = document.createTextNode("nextboy");
+		var nextboy = document.createElement("TH");
+		var t3 = document.createTextNode("Next Boy");
 		nextboy.appendChild(t3);
 		document.getElementById("rowLegend").appendChild(nextboy);
 
-		var daynum = document.createElement("TD");
-		var t4 = document.createTextNode("daynum");
+		var daynum = document.createElement("TH");
+		var t4 = document.createTextNode("Day Number");
 		daynum.appendChild(t4);
 		document.getElementById("rowLegend").appendChild(daynum);
 
@@ -50,12 +49,24 @@ function viewSchedule() {
 			document.getElementById("scheduleTable").appendChild(temp);
 			for (subindex in data[index]) {
 				var temp2 = document.createElement("TD");
-				var temp3 = document.createTextNode(data[index][subindex]);
+
+				if (data[index][subindex] === false) {
+					var temp3 = document.createTextNode("No");
+					temp2.setAttribute("bgColor", "red");
+				}
+				else if (data[index][subindex] === true) {
+					var temp3 = document.createTextNode("Yes");
+					temp2.setAttribute("bgColor", "green");
+					temp2.style.fontWeight = 'bold';
+				}
+				else {
+					var temp3 = document.createTextNode(data[index][subindex]);
+					temp2.setAttribute("bgColor", "#ffffde");
+				}
+
 				temp2.appendChild(temp3);
 				document.getElementById("row" + String(index)).appendChild(temp2);
 			}
 		}
-
 	});
-
 }

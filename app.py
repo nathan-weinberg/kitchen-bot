@@ -33,14 +33,19 @@ def select():
 	boysJSON = jsonify(boysDict)
 	return boysJSON
 
-# returns JSON of schedule in db to front-end (occurs automatically when webpage is loaded)
+# returns JSON of all boys in db to front-end (occurs automatically when webpage is loaded)
 @app.route('/schedule', methods=['POST'])
 def schedule():
 	data = db.getSchedule(conn)
 
 	# replace tuples with raw names to tuples with nicknames
 	for i in range(len(data)):
-		data[i] = (db.getNickname(conn, data[i][0]), data[i][1], db.getNickname(conn, data[i][2]), data[i][3])
+
+		# if this tuple is not current boy then do not pass on day number
+		if not data[i][1]:
+			data[i] = (db.getNickname(conn, data[i][0]), data[i][1], db.getNickname(conn, data[i][2]), "-")
+		else:
+			data[i] = (db.getNickname(conn, data[i][0]), data[i][1], db.getNickname(conn, data[i][2]), data[i][3])
 
 	dataJSON = jsonify(data)
 	return dataJSON
