@@ -14,6 +14,16 @@
 
 	<body onload="populateSelect(); viewSchedule();">
 
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<ul class=flashes>
+				{% for message in messages %}
+					<li style="font-weight: bold;">{{ message }}</li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+		{% endwith %}
+
 		<!-- Title -->
 		<div id="title">
 			<h1 id="titleHeader">KitchenBot</h1> 

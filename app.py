@@ -15,6 +15,7 @@ DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 app = Flask(__name__)
+app.secret_key = os.environ['SECRET_KEY']
 
 # routes GET case to app (occurs when webpage is accessed)
 @app.route('/', methods=['GET'])
@@ -202,8 +203,10 @@ def custom_message():
 			send_message(msg, db.getAll(conn))
 		else:
 			send_message(msg, [user])
+		flash("Message Sent!")
 
 	else:
+		flash("Incorrect Web ID")
 		log("Unauthorized access attempt!")
 
 	return redirect('/')
