@@ -150,12 +150,12 @@ def webhook():
 
 		elif "report status" in text:
 			if status == "DISABLED":
-				msg = "Kitchen duty is active."
-			else:
 				msg = "Kitchen duty is suspended."
+			else:
+				msg = "Kitchen duty is active."
 			send_message(msg)
 
-		elif ("suspend kitchen duty" in text) and (data['sender_id'] == getUserID(conn, 'NATHAN')):
+		elif ("suspend kitchen duty" in text) and (data['sender_id'] == db.getUserID(conn, 'NATHAN')):
 			if status == "DISABLED":
 				msg = "Kitchen duty is already suspended."
 			else:
@@ -163,7 +163,7 @@ def webhook():
 				msg = "Kitchen duty suspended."
 			send_message(msg)
 
-		elif ("resume kitchen duty" in text) and (data['sender_id'] == getUserID(conn, 'NATHAN')):
+		elif ("resume kitchen duty" in text) and (data['sender_id'] == db.getUserID(conn, 'NATHAN')):
 			if status == "ENABLED":
 				msg = "Kitchen duty is currently active."
 			else:
