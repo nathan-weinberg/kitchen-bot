@@ -33,12 +33,19 @@
 		 <!-- Status -->
 		<div id="status">
 			<h2 id="statusHeader">Status</h2>
-			<p>KitchenBot is Online.</p>
+			{% if status == "DISABLED" %}
+				<p>Kitchen Duty is Currently Suspended.</p>
+			{% else %}
+				<p>Kitchen Duty is Currently Active.</p>
+			{% endif %}
 		</div>
 
 		<!-- Schedule -->
 		<div id="schedule" style="overflow-x:auto;">
 			<h2 id="scheduleHeader">Schedule</h2>
+			{% if status == "DISABLED" %}
+				<p>Note: Schedule last updated prior to suspension; data is out of date</p>
+			{% endif %}
 			<div id="table"></div>
 		</div>
 

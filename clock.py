@@ -8,8 +8,14 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+status = os.environ['NOTIFY_STATUS']
 
 def kitchen_reminder():
+
+	# if notify is disabled, no operation needed
+	if status == "DISABLED":
+		log("kitchen_reminder trigger; bot NOTIFY_STATUS is disabled")
+		return "ok", 200
 
 	currentBoyNum = db.getBoyNum(conn)
 
