@@ -16,11 +16,11 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 app = Flask(__name__)
 app.secret_key = os.environ['SECRET_KEY']
-status = os.environ['NOTIFY_STATUS']
 
 # routes GET case to app (occurs when webpage is accessed)
 @app.route('/', methods=['GET'])
 def index():
+	status = db.getStatus(conn)
 	return render_template("index.html", status=status)
 
 # returns JSON of all boys in db to front-end (occurs automatically when webpage is loaded)
@@ -61,6 +61,9 @@ def webhook():
 	log('Received {}'.format(data))
 	text = data['text'].lower()
 
+	# fetch current status
+	status = db.getStatus(conn)
+
 	# detect whether or not KitchenBot is being addressed in message
 	if "@kitchenbot" in text:
 		
@@ -80,7 +83,7 @@ def webhook():
 			user = db.getNextBoy(conn)
 			dayNum = db.getBoyNum(conn)
 
-			if status == 'DISABLED':
+			if status == "DISABLED":
 				msg = "Kitchen duty is currently inactive."
 			elif dayNum == 1:
 				dayAfterTomorow = datetime.date.today() + datetime.timedelta(days=2)
@@ -100,7 +103,7 @@ def webhook():
 			user = db.getBoy(conn)
 			dayNum = db.getBoyNum(conn)
 
-			if status == 'DISABLED':
+			if status == "DISABLED":
 				msg = "Kitchen duty is currently inactive."
 			elif dayNum == 1:
 				today = datetime.date.today()
@@ -124,7 +127,7 @@ def webhook():
 
 		elif "the kitchen is a mess" in text:
 
-			if status == 'DISABLED':
+			if status == "DISABLED":
 				msg = "Kitchen duty is currently inactive."
 			else:
 				user = db.getBoy(conn)
@@ -132,7 +135,7 @@ def webhook():
 			send_message(msg, [user])
 
 		elif "the kitchen looks great" in text:
-			if status == 'DISABLED':
+			if status == "DISABLED":
 				msg = "Kitchen duty is currently inactive."
 			else:
 				user = db.getBoy(conn)
@@ -161,7 +164,7 @@ def webhook():
 			elif status == "DISABLED":
 				msg = "Kitchen duty is already suspended."
 			else:
-				os.environ['NOTIFY_STATUS'] = "DISABLED"
+				db.changeStatus(conn, "DISABLED")
 				msg = "Kitchen duty suspended."
 			send_message(msg)
 
@@ -171,7 +174,7 @@ def webhook():
 			elif status == "ENABLED":
 				msg = "Kitchen duty is currently active."
 			else:
-				os.environ['NOTIFY_STATUS'] = "ENABLED"
+				db.changeStatus(conn, "ENABLED")
 				msg = "Kitchen duty resumed."
 			send_message(msg)			
 

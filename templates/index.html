@@ -35,8 +35,10 @@
 			<h2 id="statusHeader">Status</h2>
 			{% if status == "DISABLED" %}
 				<p>Kitchen Duty is Currently Suspended.</p>
-			{% else %}
+			{% elif status == "ENABLED" %}
 				<p>Kitchen Duty is Currently Active.</p>
+			{% else %}
+				<p>Status Unknown</p>
 			{% endif %}
 		</div>
 
