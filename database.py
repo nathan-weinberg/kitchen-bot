@@ -54,7 +54,7 @@ def getNickname(conn, user):
 	return nickname
 
 def getUserID(conn, user):
-	''' gets String of GroupMe ID of user
+	''' gets Int of GroupMe ID of user
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT id FROM user_ids WHERE name LIKE (%s);",(user,))
