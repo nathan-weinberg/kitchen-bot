@@ -11,6 +11,14 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 def kitchen_reminder():
 
+	# fetch current status
+	status = db.getStatus(conn)
+
+	# if notify is disabled, no operation needed
+	if status == "DISABLED":
+		log("kitchen_reminder trigger; bot NOTIFY_STATUS is disabled")
+		return "ok", 200
+
 	currentBoyNum = db.getBoyNum(conn)
 
 	# if first day has passed

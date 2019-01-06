@@ -54,13 +54,34 @@ def getNickname(conn, user):
 	return nickname
 
 def getUserID(conn, user):
-	''' gets String of GroupMe ID of user
+	''' gets Int of GroupMe ID of user
 	'''
 	cur = conn.cursor()
 	cur.execute("SELECT id FROM user_ids WHERE name LIKE (%s);",(user,))
 	user_id = cur.fetchone()[0]
 	cur.close()
 	return user_id
+
+def getStatus(conn):
+	''' gets String of status of KitchenBot
+	'''
+	cur = conn.cursor()
+	cur.execute("SELECT status FROM meta")
+	status = cur.fetchone()[0]
+	cur.close()
+	return status
+
+def changeStatus(conn, newStatus):
+	''' changes status of KitchenBot
+	'''
+	cur = conn.cursor()
+
+	# changes status variable of meta table to newStatus
+	cur.execute("UPDATE meta SET status = (%s);",(newStatus,))
+
+	# commit changes
+	conn.commit()
+	cur.close()	
 
 def changeDay(conn, user):
 	''' changes dayNum attribute to 2 for given user

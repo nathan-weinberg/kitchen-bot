@@ -20,7 +20,8 @@ app.secret_key = os.environ['SECRET_KEY']
 # routes GET case to app (occurs when webpage is accessed)
 @app.route('/', methods=['GET'])
 def index():
-	return render_template("index.html")
+	status = db.getStatus(conn)
+	return render_template("index.html", status=status)
 
 # returns JSON of all boys in db to front-end (occurs automatically when webpage is loaded)
 @app.route('/select', methods=['POST'])
@@ -60,6 +61,9 @@ def webhook():
 	log('Received {}'.format(data))
 	text = data['text'].lower()
 
+	# fetch current status
+	status = db.getStatus(conn)
+
 	# detect whether or not KitchenBot is being addressed in message
 	if "@kitchenbot" in text:
 		
@@ -70,14 +74,18 @@ def webhook():
 					"Whose day is next?\n" \
 					"The kitchen is a mess!\n" \
 					"The kitchen looks great!\n" \
+					"Report status.\n" \
 					"Send help!"
 			send_message(msg)
 
 		elif ("whose day is next" in text) or ("who is next" in text):
+
 			user = db.getNextBoy(conn)
 			dayNum = db.getBoyNum(conn)
 
-			if dayNum == 1:
+			if status == "DISABLED":
+				msg = "Kitchen duty is currently inactive."
+			elif dayNum == 1:
 				dayAfterTomorow = datetime.date.today() + datetime.timedelta(days=2)
 				msg = "It will be {}'s day on {}!".format(
 					db.getNickname(conn, user),
@@ -95,7 +103,9 @@ def webhook():
 			user = db.getBoy(conn)
 			dayNum = db.getBoyNum(conn)
 
-			if dayNum == 1:
+			if status == "DISABLED":
+				msg = "Kitchen duty is currently inactive."
+			elif dayNum == 1:
 				today = datetime.date.today()
 				tomorow = datetime.date.today() + datetime.timedelta(days=1)
 				msg = "It is {}'s day today, {}, and tomorow, {}!".format(
@@ -116,13 +126,20 @@ def webhook():
 			send_message(msg)
 
 		elif "the kitchen is a mess" in text:
-			user = db.getBoy(conn)
-			msg = "{}, clean the kitchen!".format(db.getNickname(conn, user))
+
+			if status == "DISABLED":
+				msg = "Kitchen duty is currently inactive."
+			else:
+				user = db.getBoy(conn)
+				msg = "{}, clean the kitchen!".format(db.getNickname(conn, user))
 			send_message(msg, [user])
 
 		elif "the kitchen looks great" in text:
-			user = db.getBoy(conn)
-			msg = "Great job with the kitchen {}!".format(db.getNickname(conn, user))
+			if status == "DISABLED":
+				msg = "Kitchen duty is currently inactive."
+			else:
+				user = db.getBoy(conn)
+				msg = "Great job with the kitchen {}!".format(db.getNickname(conn, user))
 			send_message(msg, [user])
 
 		elif ("downstairs" or "basement") and ("fridge" or "refrigerator") in text:
@@ -133,6 +150,33 @@ def webhook():
 			users = db.getAll(conn)
 			msg = "Help!"
 			send_message(msg, users)
+
+		elif "report status" in text:
+			if status == "DISABLED":
+				msg = "Kitchen duty is suspended."
+			else:
+				msg = "Kitchen duty is active."
+			send_message(msg)
+
+		elif "suspend kitchen duty" in text:
+			if data['sender_id'] != str(db.getUserID(conn, 'NATHAN')):
+				msg = "You are not authorized to make that command."
+			elif status == "DISABLED":
+				msg = "Kitchen duty is already suspended."
+			else:
+				db.changeStatus(conn, "DISABLED")
+				msg = "Kitchen duty suspended."
+			send_message(msg)
+
+		elif "resume kitchen duty" in text:
+			if data['sender_id'] != str(db.getUserID(conn, 'NATHAN')):
+				msg = "You are not authorized to make that command."
+			elif status == "ENABLED":
+				msg = "Kitchen duty is currently active."
+			else:
+				db.changeStatus(conn, "ENABLED")
+				msg = "Kitchen duty resumed."
+			send_message(msg)			
 
 		# If no pre-set response, analyze general sentiment of message and return appropriate response
 		else:
