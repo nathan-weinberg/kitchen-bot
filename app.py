@@ -5,7 +5,7 @@ import time
 import datetime
 import requests
 import psycopg2
-import database as db
+import db_lib as db
 
 from flask import *
 from passlib.hash import pbkdf2_sha256
