@@ -17,6 +17,9 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 app = Flask(__name__)
 app.secret_key = os.environ['SECRET_KEY']
 
+# set this to the NAME of the admin (can enable/disable kitchen duty)
+admin = 'NATHAN'
+
 # routes GET case to app (occurs when webpage is accessed)
 @app.route('/', methods=['GET'])
 def index():
@@ -159,7 +162,7 @@ def webhook():
 			send_message(msg)
 
 		elif "suspend kitchen duty" in text:
-			if data['sender_id'] != str(db.getUserID(conn, 'NATHAN')):
+			if data['sender_id'] != str(db.getUserID(conn, admin)):
 				msg = "You are not authorized to make that command."
 			elif status == "DISABLED":
 				msg = "Kitchen duty is already suspended."
@@ -169,7 +172,7 @@ def webhook():
 			send_message(msg)
 
 		elif "resume kitchen duty" in text:
-			if data['sender_id'] != str(db.getUserID(conn, 'NATHAN')):
+			if data['sender_id'] != str(db.getUserID(conn, admin)):
 				msg = "You are not authorized to make that command."
 			elif status == "ENABLED":
 				msg = "Kitchen duty is currently active."
