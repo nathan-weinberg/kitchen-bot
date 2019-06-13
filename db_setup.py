@@ -66,7 +66,7 @@ cur.execute('''
 # Populate meta table
 cur.execute('''
 	INSERT INTO meta (status) VALUES
-		("ENABLED")
+		('ENABLED')
 	;
 ''')
 
