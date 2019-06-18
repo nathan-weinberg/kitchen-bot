@@ -8,7 +8,7 @@ GroupMe Bots require an account with GroupMe. They can be created either by API 
 
 Once done, you will need to incorporate the "bot_id" of your bot into your hosting environment as "GROUPME_BOT_ID". You will also need to incorporate the database URL you are using in the environment as "DATABASE_URL" and a random string (can be anything) as "SECRET_KEY."
 
-If you are using a Postgres database, the "db_setup.py" file can be used to help assist the setup/refresh of your database. See the GroupMe Bot tutorial for instructions on how to obtain the group and user ids.
+If you are using a Postgres database, the "db_setup.py" file can be used to help assist the setup/refresh of your database. See the [GroupMe Bot tutorial](https://dev.groupme.com/tutorials/bots) for instructions on how to obtain the group and user ids.
 
 ### Custom Messaging and Hashing
 KitchenBot is currently configured to allow custom messages to be sent through it via an HTML form. To use this form a Web ID (password) is required, which is verified with a passlib SHA256 hash object. To set this value use the following code:
