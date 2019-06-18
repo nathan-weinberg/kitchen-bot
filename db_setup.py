@@ -4,6 +4,12 @@ DATABASE_URL = 'YOUR DATABASE URL'
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
 
+# Drop all tables to prevent conflict
+cur.execute("DROP TABLE IF EXISTS kitchen_boy")
+cur.execute("DROP TABLE IF EXISTS user_ids")
+cur.execute("DROP TABLE IF EXISTS nicknames")
+cur.execute("DROP TABLE IF EXISTS meta")
+
 # Create nicknames table
 cur.execute('''
 	CREATE TABLE nicknames (
